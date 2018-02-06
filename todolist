@@ -1,10 +1,13 @@
 panthere rose
 
+____________________________________________
+
 idée pour xml : 
 
 ville 
 	quartier
 		rue 
+		suite de node assez proches. 
 			adresse
 
 point of interest
@@ -24,12 +27,16 @@ personnes
 	travail
 		adresse
 		nom
+		type de metier
+			type de déplacement pour le travail
 	maison 
 		adresse
 	famille
 		personnes 
 	emploi du temps 
 		list activity
+	amis
+		list personnes, provenance
 
 ______________________________________________
 
@@ -40,3 +47,29 @@ emplois du temps généraux.
 
 Creer familles (moyen de génération)
 
+_____________________________________________________
+
+
+
+Génération rues
+	Rue rectilignes 
+	abstraites 
+
+
+generation métro : /adele
+	hubs 
+	lignes transversales (de deux points éloignés du centres plutot droites, forcées sur les hubs)
+	lignes internes (moins loin du centre, passent par les lignes transversales, plus zigouigoui)
+
+
+generation points d'interets 
+		qu'est ce que c'est : boutique/travail/sport/sorties (cinéma etc)
+		comment les générer : regarder un peu les datasets. (?)
+
+génération emplois du temps :  /Louis 
+	papiers sur les déplacements et emploie du temps à regarder. 
+	génération du profil de personne plus de son emploie du temps
+		interaction entre les personnes ? 
+		
+
+	
