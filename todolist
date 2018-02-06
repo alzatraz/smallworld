@@ -1,1 +1,42 @@
 panthere rose
+
+idée pour xml : 
+
+ville 
+	quartier
+		rue 
+			adresse
+
+point of interest
+	adresse
+	horaires
+
+ligne de transport
+	liste d'adresse (localisaion)
+	horaires
+
+activity :
+	adresse
+	horaire
+	type of activity//
+
+personnes
+	travail
+		adresse
+		nom
+	maison 
+		adresse
+	famille
+		personnes 
+	emploi du temps 
+		list activity
+
+______________________________________________
+
+Creer les lignes de transports. 
+
+Creer les activités générales 
+emplois du temps généraux. 
+
+Creer familles (moyen de génération)
+
