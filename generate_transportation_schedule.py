@@ -1,3 +1,6 @@
+import numpy as np
+import generate_transportation_geometry as geo
+
 def start_end_terminus(day):
     if day == 'saturday' or day == 'friday':
         offset = 1
@@ -63,7 +66,7 @@ def generate_departure_times(start):
                 else:
                     mu = 6*60
                     sigma = 4*60
-    delta = generate_gaussian_positive_variable(60, 600, mu, sigma)
+    delta = geo.gaussian_trunc(60, 600, mu, sigma)
     delta = convert_to_tuple(delta)
     new_start = add_times(delta, start)
     return new_start
@@ -125,7 +128,7 @@ def new_time_from_previous(times_between, start, k):
     mu = 0
     mini = int(-time_between/5)
     maxi = int(time_between/2)
-    delta = generate_gaussian_positive_variable(mini, maxi, mu, sigma)
+    delta = geo.gaussian_trunc(mini, maxi, mu, sigma)
     t = delta + time_between
     t = convert_to_tuple(t)
     new_time = add_times(start, t)

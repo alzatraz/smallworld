@@ -1,45 +1,49 @@
-import sympy
-from sympy import *
-from sympy.geometry import *
-from sympy.plotting import plot
-import numpy as np
-import math
+import generate_transportation_schedule as sch
+import generate_station_names as nm
+import generate_transportation_geometry as geo
+import transportation_display as dis
 
-def generate_n_lines():
-    n_lines = 0
-    mu, sigma = 10, 3 
-    while n_lines == 0:
-        n_lines = np.random.normal(mu, sigma)
-        print(n_lines)
-    return (round(n_lines))
-
-def generate_lines(n_lines):
-    mu, sigma = 5000, 1500 
-    lines = []
-    for _ in range(0, n_lines):
-        rhos = np.random.normal(mu, sigma, 2)
-        theta0 = np.random.uniform(0, 2*math.pi)
-        theta1 = np.random.normal(theta0-math.pi, math.pi/3)
-        source = Point(int(rhos[0]*math.cos(theta0)), int(rhos[0]*math.sin(theta0)))
-        target = Point(int(-rhos[1]*math.cos(theta1)), int(-rhos[1]*math.sin(theta1)))
-        line = Segment(source, target)
-        lines.append(line)
-    return lines
-
-def find_intersections(lines):
-    intersections = []
-    for i in range(0, len(lines)-1):
-        for j in range(i+1, len(lines)):
-            line1 = lines[i]
-            line2 = lines[j]
-            inter = intersection(line1, line2)
-            if inter:
-                point = inter[0]
-                intersections.append((point, i, j))
-    return intersections
-
-def generate_stations(lines, intersections):
-    stations = {}
-    for inter in intersections
 
 if __name__ == "__main__":
+    n_lines = geo.gaussian_trunc(5, 17, 10, 3)
+    print (n_lines, "lines will be generated")
+    lines = geo.generate_lines(n_lines, 5000, 1000)
+
+    dis.display_segments(lines=lines, intersections=[], title='simple segments')
+
+    intersections = geo.find_intersections(lines)
+    dis.display_segments(lines, intersections, 'simple segments with intersections')
+
+    outliers, clusters = geo.points_to_glue(intersections, 700)
+    glued_inter = geo.glue_inter(outliers, clusters, intersections)
+    dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
+
+    merged_lines = geo.merge_lines(lines, glued_inter)
+    dis.display_network(merged_lines, glued_inter, [],[], [], 'lines crossing the intersections')
+
+    stations = geo.generate_stations(merged_lines, 200)
+    stations = geo.remove_duplicates(stations, glued_inter)
+    dis.display_network(merged_lines, glued_inter, stations, [], [],  'lines with stations')
+
+    outliers, clusters = geo.points_to_glue(stations, 300)
+    glued_stations = geo.glue_stations(outliers, clusters, stations)
+    dis.display_network(merged_lines, [], glued_stations, [], [],  'lines with "glued" stations')
+
+    n_stations = len(glued_stations)
+    print(n_stations)
+
+    hubs = geo.compute_hubs(glued_stations)
+    dis.display_network(merged_lines, [], glued_stations, hubs, [], 'lines with "glued" stations and hubs')
+
+    fast_lines = geo.build_fast_lines(hubs, 5000, 1000)
+
+            
+    dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
+
+
+
+    updated_stations = geo.update_compatibilities(glued_stations, fast_lines)
+    names = nm.generate_names(len(updated_stations))
+    lines_dict = geo.build_lines_dict(updated_stations[:40], names)
+
+    lines_dict = sch.compute_whole_schedule(lines_dict, 'friday')

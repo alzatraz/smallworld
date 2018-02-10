@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt # need sudo apt-get install python3-tk
+import numpy as np
+
 def display_segments(lines, intersections, title):
     plt.figure(figsize=(15, 10))
     fig, ax = plt.subplots()
@@ -12,7 +15,7 @@ def display_segments(lines, intersections, title):
             x, y = inter[0][0], inter[0][1]
             ax.scatter(x, y, marker='x')
     plt.title(title)
-    plt.show()
+    plt.savefig(title+".png")
 
 
 def display_network(bended_lines, intersections, stations, hubs, fast_lines, title):
@@ -46,5 +49,5 @@ def display_network(bended_lines, intersections, stations, hubs, fast_lines, tit
         ys = [hub[0][1] for hub in fast_line]
         ax.plot(xs, ys, color=colors[j])
     plt.title(title)
-    plt.show()
+    plt.savefig(title+".png")
 
