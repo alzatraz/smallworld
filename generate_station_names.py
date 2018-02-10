@@ -1,6 +1,7 @@
 import re
 import numpy as np
 
+
 def find_country_names():
     page = open("countries.txt", "r")
     page = str(page.read())
@@ -31,17 +32,17 @@ def rectify_unbreakable(name):
     else:
         return name
 
-
 def generate_names(n_stations):
     station_names = set()
     link_words = find_country_names()
     states = list(link_words.keys())
-    places = ['Place', 'Rue', 'Avenue', 'Gare']
+    churches = ["Basilique", "Eglise", "Cathédrale"]
+    places = ['Place', 'Rue', 'Avenue', 'Gare', 'Pont', 'Quai']
     names = ['Victor Hugo', 'Guy de Maupassant', 'John F. Kennedy',
              'Franklin D. Roosevelt', 'Gustave Eiffel', 'Adèle Mortier',
              'Louis Cohen', 'Richelieu', 'Marguerite Duras',
              'Nathalie Sarraute', 'Félix Faure', 'Mazarin', 'Danton',
-             'Maître Gims', 'Emmanuel Macron', 'Nicolas Sarkozy',
+             'Maître&Gims', 'Emmanuel Macron', 'Nicolas Sarkozy',
              'Johnny Hallyday', 'Booba', 'Claude François', 'Voltaire',
              "Jeanne&d'Arc", "Napoléon Bonaparte", "René Descartes",
              "Blaise Pascal", "Molière", "Claude Monet", "Louis Pasteur",
@@ -68,33 +69,49 @@ def generate_names(n_stations):
         state = np.random.choice(states)
         name = np.random.choice(names)
         if prob_places == 1:
+            # something like "Place ..."
             station_name = place
-            prob_state = np.random.binomial(1, .7)
+            prob_state = np.random.binomial(1, .3)
             if prob_state == 1:
-                # something like "Place del'Argentine"
+                # something like "Place de l'Argentine"
                 station_name = station_name + " " + link_words[state] \
                                + state
                 del states[states.index(state)]
             else:
-                # something like "Place Edit Piaf"
-                true_name = rectify_unbreakable(name)
-                station_name = station_name + " " + true_name
-                del names[names.index(name)]
+                prob_saint = np.random.binomial(1, .2)
+                if prob_saint == 1:
+                    # something like "Place Sainte Marie"
+                    name = rectify_unbreakable(name)
+                    name = name.split()[0]
+                    if name[-1] == 'e':
+                        station_name = station_name + " Sainte " + name
+                    else:
+                        station_name = station_name + " Saint " + name
+                else:
+                    # something like "Place Edit Piaf"
+                    true_name = rectify_unbreakable(name)
+                    station_name = station_name + " " + true_name
+                    del names[names.index(name)]
 
         else:
             prob_state = np.random.binomial(1, .2)
             if prob_state == 1:
-                station_name = state
+                prob_saint = np.random.binomial(1, .2)
+                if prob_saint == 1:
+                    # something like "Notre Dame de l'Argentine"
+                    station_name = station_name + " Notre Dame " \
+                                    + link_words[state] + state
+                else:
+                    # something like "Argentine"
+                    station_name = state
                 del states[states.index(state)]
-
             else:
-                prob_second_name = np.random.binomial(1, 0.7)
+                prob_second_name = np.random.binomial(1, 0.5)
                 if prob_second_name == 1:
                     # something like "Faidherbe-Chaligny"
                     name1 = name.split()[-1]
                     name1 = rectify_unbreakable(name1)
                     station_name = station_name + name1
-
                     del names[names.index(name)]
 
                     name = np.random.choice(names)
@@ -104,12 +121,26 @@ def generate_names(n_stations):
                     del names[names.index(name)]
 
                 else:
-                    # something like "Louis Lumière"
-                    station_name = station_name + name
-                    del names[names.index(name)]
+                    prob_saint = np.random.binomial(1, .4)
+                    if prob_saint == 1:
+                        prob_church = np.random.binomial(1, .3)
+                        if prob_church == 1:
+                            # something like "Eglise Sainte Marie"
+                            church_type = np.random.choice(churches)
+                            station_name = station_name + church_type
+                        name = name.split()[0]
+                        # something like "(Eglise)" Saint Maxime
+                        if name[-1] == 'e':
+                            station_name = station_name + " " + "Sainte " + name
+                        else:
+                            station_name = station_name + " " + "Saint " + name
+                    else:
+                        # something like "Louis Lumière"
+                        station_name = station_name + rectify_unbreakable(name)
+                        del names[names.index(name)]
         station_names.add(station_name)
     return station_names
 
 if __name__ == "__main__":
-	names = generate_names(50)
-	print(names)
+    names = generate_names(50)
+    print(names)
