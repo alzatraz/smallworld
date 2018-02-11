@@ -70,7 +70,11 @@ def build_lines_dict(stations):
         numbers = list(numbers)
         for line, number in lines_and_numbers:
             lines_dict[line].append([point, number, name])
+    for line in lines_dict.values():
+        stations = [station[0] for station in line]
+        unique_stations = set(stations)
     return lines_dict
+
 
 def remove_gaps_in_ordering(lines_dict):
     for line in lines_dict.values():
@@ -122,17 +126,12 @@ def compute_times_between_stations(line, speed):
 
     l = []
     for i, station in enumerate(line):
-        print("pass n°", i+1)
         l.append(station[0])
         point_to_number[station[0]] = station[1]
-    print("list of points", l)
-    print("len line", n_stations)
-    print("len dictionary", len(point_to_number.keys()))
     # problème au niveau du dictionnaire !!!
     # la ligne contient plusieurs points identiques !!
     # il faut regarder la fonction 
     points = sorted(point_to_number, key=point_to_number.get)
-    print("len points", len(points))
 
     for i in range(0, n_stations-1):
         p1 = points[i]

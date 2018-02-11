@@ -71,11 +71,6 @@ def restrict_gender(gender):
     return gender
 
 
-def keep_family_name(name):
-    parts = name.split()
-    return parts[-1]
-
-
 def rectify_unbreakable(name):
     if '&' in name:
         i = name.index('&')
@@ -87,6 +82,10 @@ def take_first_if_composed(name):
     if '-' in name:
         i = name.index('-')
         return name[:i]
+
+def drop_first_name(name):
+    parts = name.split()
+    return parts[-1]
 
 def build_saint_name(first_name, first_names_to_gender):
     gender = first_names_to_gender[first_name]
@@ -134,9 +133,14 @@ def generate_names(n_stations):
                     station_name = station_name + saint_name
                     del first_names[first_names.index(first_name)]
                 else:
-                    # something like Place Marcel Pagnol
+                    # something like Place (Marcel) Pagnol
                     name = np.random.choice(names)
-                    true_name = rectify_unbreakable(name)
+                    prob_drop_first_name = np.random.binomial(1, .3)
+                    if prob_drop_first_name:
+                        true_name = drop_first_name(name)
+                        true_name = rectify_unbreakable(true_name)
+                    else:
+                        true_name = rectify_unbreakable(name)
                     station_name = station_name + true_name
                     del names[names.index(name)]
             else:
@@ -169,11 +173,11 @@ def generate_names(n_stations):
                         del names[names.index(name1)]
                         name2 = np.random.choice(names)
                         del names[names.index(name2)]
-
-                        true_name1 = rectify_unbreakable(name1)
-                        true_name2 = rectify_unbreakable(name2)
-                        true_name1 = keep_family_name(true_name1)
-                        true_name2 = keep_family_name(true_name2)
+                        true_name1 = drop_first_name(name1)
+                        true_name2 = drop_first_name(name2)
+                        true_name1 = rectify_unbreakable(true_name1)
+                        true_name2 = rectify_unbreakable(true_name2)
+                        
                         station_name =  true_name1 + "-" + true_name2
                     else:
                         # something like Georges Brassens
@@ -194,6 +198,8 @@ def generate_names(n_stations):
 def add_names(names, stations):
     for i, name in enumerate(names):
         stations[i].append(name)
+    stations_points = [station[0] for station in stations]
+
     return stations
 
 

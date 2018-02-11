@@ -155,7 +155,7 @@ Raoul Dufy, m
 Maurice Utrillo, m
 Pablo Picasso, m
 Léonard de Vinci, m
-Vincent Van Gogh, m
+Vincent Van&Gogh, m
 Rembrandt, m
 Michel-Ange, m
 Wassily Kandinsky, m
@@ -178,7 +178,7 @@ Salvador Dali, m
 Alfred Stieglitz, m
 Irving Penn, m
 Garry Winogrand, m
-Man Ray, m
+Man&Ray, m
 Philippe Halsman, m
 Vivian Maier, f
 Imogen Cunningham, f
@@ -196,3 +196,9 @@ Nadar, m
 Jean Vilar, m
 Jean-Louis Barrault, m
 Louis Jouvet, m
+Nelson Mandela, m
+Léopold Sédar Senghor, m
+Bob Marley, m
+Martin Luther&King, m
+Gamal Abdel Nasser, m
+Boutros Boutros-Ghali, m

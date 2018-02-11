@@ -238,31 +238,60 @@ def glue_stations(outliers, clusters, stations):
         for station_id in station_ids:
             lines_crossing.extend(stations[station_id][1])
             points.append(stations[station_id][0])
-
-        lines_ids, numbers = zip(*lines_crossing)
-        lines_ids = list(lines_ids)
-        numbers = list(numbers)
-        lines_unique_ids = list(set(lines_ids))
-        lines_ids = np.array(lines_ids)
-        for line_unique_id in lines_unique_ids:
-            # we check if there was two or more points from the same line that have been glued
-            indices = np.where(lines_ids == line_unique_id)[0]
-            indices = list(indices)
-            indices = sorted(indices, reverse=True)
-            if len(indices) > 1:
-                # we delete the duplicate informations about the line
-                for index in indices[1:]:
-                    del lines_crossing[index]
-                        
-                        
         center = np.mean(points, axis=0)
         centers.append([Point(int(center[0]), int(center[1])), lines_crossing])
     for outlier in outliers:
         centers.append(stations[outlier])
     return (centers)
+"""
+        if len(lines_unique_ids) < len(lines_ids):
+            ids_to_del = []
+            print("there are duplicates!!")
+            lines_ids = np.array(lines_ids)
+            for line_unique_id in lines_unique_ids:
+                # we check if there was two or more points from the same line that have been glued
+                indices = np.where(lines_ids == line_unique_id)[0]
+                indices = list(indices)
+                indices = sorted(indices, reverse=True)
+                if len(indices) > 1:
+                    ids_to_del.extend(sorted(indices)[1:])
+                    print("indices where duplicates :", indices)
+            ids_to_del = (sorted(ids_to_del, reverse=True))
+            print("all indices to delete", ids_to_del)
+            for id_to_del in ids_to_del:
+                del lines_crossing[id_to_del]
+            print("new lines_crossing", lines_crossing)
 
+"""
+        
 
-def remove_duplicates(stations, glued_inter):
+def remove_duplicate_lines(stations):
+    for station in stations:
+        lines_crossing = station[1]
+        # list of tuples (line_id, number)
+
+        lines_ids, numbers = zip(*lines_crossing)
+
+        lines_ids = list(lines_ids)
+        numbers = list(numbers)
+        lines_unique_ids = list(set(lines_ids))
+
+        if len(lines_ids) != len(lines_unique_ids):
+            ids_to_del = []
+
+            lines_ids = np.array(lines_ids)
+            for line_unique_id in lines_unique_ids:
+                # we check if there was two or more points from the same line that have been glued
+                indices = np.where(lines_ids == line_unique_id)[0]
+                indices = list(indices)
+                if len(indices) > 1:
+                    ids_to_del.extend(sorted(indices)[1:])
+            ids_to_del = (sorted(ids_to_del, reverse=True))
+            for id_to_del in ids_to_del:
+                del station[1][id_to_del]
+    return stations
+
+def merge_stations(stations, glued_inter):
     """
     Given :
         - a list of stations of the form :
@@ -375,6 +404,8 @@ def build_fast_lines(hubs, mu, sigma):
 
 
 def update_compatibilities(stations, fast_lines):
+
+    # no point duplicates, but maybe a point as several times thesame line in its compat
     fast_lines_names = list(ascii_uppercase) 
     stations_points = [station[0] for station in stations]
     for j, fast_line in enumerate(fast_lines):
@@ -385,4 +416,4 @@ def update_compatibilities(stations, fast_lines):
 
 
 if __name__ == '__main__':
-	print("hello")
+    print("hello")

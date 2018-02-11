@@ -14,7 +14,7 @@ if __name__ == "__main__":
     intersections = geo.find_intersections(lines)
     #dis.display_segments(lines, intersections, 'simple segments with intersections')
 
-    outliers, clusters = geo.points_to_glue(intersections, 700)
+    outliers, clusters = geo.points_to_glue(intersections, 600)
     glued_inter = geo.glue_inter(outliers, clusters, intersections)
     #dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
 
@@ -22,31 +22,29 @@ if __name__ == "__main__":
     #dis.display_network(merged_lines, glued_inter, [],[], [], 'lines crossing the intersections')
 
     stations = geo.generate_stations(merged_lines, 200)
-    stations = geo.remove_duplicates(stations, glued_inter)
+    stations = geo.merge_stations(stations, glued_inter)
     #dis.display_network(merged_lines, glued_inter, stations, [], [],  'lines with stations')
 
     outliers, clusters = geo.points_to_glue(stations, 300)
     glued_stations = geo.glue_stations(outliers, clusters, stations)
     #dis.display_network(merged_lines, [], glued_stations, [], [],  'lines with "glued" stations')
-
-    n_stations = len(glued_stations)
-    print(n_stations)
-
-    hubs = geo.compute_hubs(glued_stations)
+    filtered_stations = geo.remove_duplicate_lines(glued_stations)
+    
+    hubs = geo.compute_hubs(filtered_stations)
     #dis.display_network(merged_lines, [], glued_stations, hubs, [], 'lines with "glued" stations and hubs')
 
     fast_lines = geo.build_fast_lines(hubs, 5000, 1000)
     n_fast_lines = len(fast_lines)
     print(n_fast_lines, "fast lines have been generated")
 
-            
+
     #dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
 
-    updated_stations = geo.update_compatibilities(glued_stations, fast_lines)
+    updated_stations = geo.update_compatibilities(filtered_stations, fast_lines)
     # problem in this function
 
 
-    
+
     names = nm.generate_names(len(updated_stations))
     updated_stations = nm.add_names(names, updated_stations)
     lines_dict = sch.build_lines_dict(updated_stations)
@@ -56,4 +54,24 @@ if __name__ == "__main__":
 
     lines_dict = sch.compute_whole_schedule(lines_dict, 'friday')
 
-    print(lines_dict[0][0][3])
+    for i, line in lines_dict.items():
+        print('LINE :', i )
+        for station in line:
+            print(station[0], "     ", station[1], "    ", station[2])
+
+    print("TEST GAPS")
+    for line in lines_dict.values():
+        numbers = []
+        for station in line:
+            numbers.append(station[1])
+        print(sorted(numbers))
+
+
+
+    print("TEST SCHEDULE")
+
+    k = 35
+    line = lines_dict[4]
+    for station in line:
+        print(station[2], "     ", station[1], "     ", station[3][k])
+
