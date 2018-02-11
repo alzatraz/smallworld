@@ -1,0 +1,198 @@
+Victor Hugo, m
+Guy de Maupassant, m
+John F. Kennedy, m
+Franklin D. Roosevelt, m
+Gustave Eiffel, m
+Adèle Mortier, f
+Louis Cohen, m
+Richelieu, m
+Marguerite Duras, f
+Nathalie Sarraute, f
+Félix Faure, m
+Mazarin, m
+Danton, m
+Maître&Gims, m
+Emmanuel Macron, m
+Nicolas Sarkozy, m
+Johnny Hallyday, m
+Booba, m
+Claude François, m
+Voltaire, m
+Jeanne&d'Arc, f
+Napoléon Bonaparte, m
+René Descartes, m
+Blaise Pascal, m
+Molière, m
+Claude Monet, m
+Louis Pasteur, m
+Marie Curie, f
+Marcel Pagnol, m
+Edit Piaf, f
+Turgot, m
+Necker, m
+Sully, m
+Jean Jaurès, m
+Auguste Renoir, m
+Serge Gainsbourg, m
+Georges Brassens, m
+Lorie, f
+Florent Pagny, m
+Céline Dion, f
+Nabilla, f
+Jean-Paul Sartre, m
+Boris Vian, m
+Albert Camus, m
+Charles Aznavour, m
+Jean Moulin, m
+Emile Zola, m
+David Douillet, m
+Jacques Prévert, m
+Yannick Noah, m
+Jean Cocteau, m
+Jean Ferrat, m
+Louis Lumière, m
+Daniel Balavoine, m
+Gérard&Philipe, m
+Françoise Dolto, f
+David Guetta, m
+Bourvil, m
+Coluche, m
+Charlemagne, m
+Zinédine Zidane, m
+Franck Ribéry, m
+Michel Platini, m
+Jacques Chirac, m
+Francis Cabrel, m
+Simone Veil, f
+Joséphine Baker, f
+Marlène Dietrich, f
+Anne Frank, f
+Simone de Beauvoir, f
+Françoise Sagan, f
+Brigitte Bardot, f
+Mylène Farmer, f
+Saint-Louis, m
+Hugues&Capet, m
+Philippe&Auguste, m
+François&1er, m
+Jean-Louis Borloo, m
+Jean-Claude Van&Damme, m
+Charles Baudelaire, m
+Paul Verlaine, m
+Guillaume Apollinaire, m
+Bernard-Henri Lévy, m
+Jack Lang, m
+Saint-John Perse, m
+Rainer Maria Rilke, m
+André Breton, m
+Henri Poincaré, m
+Evariste Galois, m
+Niels Abel, m
+Charles Babbage, m
+Alan Turing, m
+Daniel Bernoulli, m
+Etienne Bezout, m
+Bernhard Bolzano, m
+Fibonacci, m
+Georg Cantor, m
+Bertrand Russell, m
+Augustin-Louis Cauchy, m
+Nicolas Copernic, m
+Jean Le Rond d'Alembert, m
+Pierre de Fermat, m
+Joseph Fourier, m
+Gottlob Frege, m
+David Hilbert, m
+John von Neumann, m
+Richard Feynman, m
+Giuseppe Peano, m
+Joseph-Louis Lagrange, m
+Félix Klein, m
+Srinivasa Ramanujan, m
+Hannah Arendt, f
+Virginia Woolf, f
+Berthe Morisot, f
+Rosa Parks, f
+George Sand, f
+Margaret Hamilton, f
+Jane Austen, f
+Marguerite Yourcenar, f
+Alexandra David-Néel, f
+Mary Shelley, f
+Agatha Christie, f
+Colette, f
+Germaine de Staël, f
+Olympe de Gouge, f
+Christine de Pizan, f
+Louise Labé, f
+Emily Brontë, f
+Sophie Germain, f
+Ada Lovelace, f
+Jane Goodall, f
+Rosalind Franklin, f
+Gertrude Elion, f
+Vera Rubin, f
+Albert Einstein, m
+William Shakespeare, m
+Jean-Michel Basquiat, m
+Alberto Giacometti, m
+Nicolas Poussin, m
+Jean-Antoine Watteau, m
+Jean-Baptiste Greuze, m
+Jean-Honoré Fragonard, m
+Jacques-Louis David, m
+Théodore Géricault, m
+Eugène Delacroix, m
+Edouard Manet, m
+Edgar Degas, m
+Paul Cézanne, m
+Claude Monet, m
+Pierre-Auguste Renoir, m
+Paul Gauguin, m
+Henri de Toulouse-Lautrec, m
+Henri Matisse, m
+Raoul Dufy, m
+Maurice Utrillo, m
+Pablo Picasso, m
+Léonard de Vinci, m
+Vincent Van Gogh, m
+Rembrandt, m
+Michel-Ange, m
+Wassily Kandinsky, m
+Edvard Munch, m
+Andy Warhol, m
+Gustave Courbet, m
+Alfred Hitchcock, m
+Orson Welles, m
+Charlie Chaplin, m
+Akira Kurosawa, m
+Ingmar Bergman, m
+Henrik Ibsen, m
+Frederico Fellini, m
+Sergio Leone, m
+Frank Capra, m
+Henri Cartier-Bresson, m
+Robert Capa, m
+Dorothea Lange, f
+Salvador Dali, m
+Alfred Stieglitz, m
+Irving Penn, m
+Garry Winogrand, m
+Man Ray, m
+Philippe Halsman, m
+Vivian Maier, f
+Imogen Cunningham, f
+Brassaï, m
+Walker Evans, m
+August Sander, m
+Jean-Luc Godard, m
+Robert Doisneau, m
+Willy Ronis, m
+Yann Arthus-Bertrand, m
+Aloysius Bertrand, m
+Berenice Abbott, f
+Eugène Atget, m
+Nadar, m
+Jean Vilar, m
+Jean-Louis Barrault, m
+Louis Jouvet, m

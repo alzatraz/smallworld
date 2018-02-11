@@ -3,7 +3,6 @@ from sympy import *
 from sympy.geometry import *
 import numpy as np
 import math
-import matplotlib.pyplot as plt # need sudo apt-get install python3-tk
 from scipy.stats import truncnorm
 import numpy as np
 from collections import defaultdict
@@ -183,7 +182,7 @@ def generate_stations(bended_lines, variance):
                 approx_x1 = np.random.normal(x1, variance)
                 approx_y1 = np.random.normal(y1, variance)
                 approx_source = Point(int(approx_x1), int(approx_y1))
-                stations.append((approx_source, [(j, station_number)]))
+                stations.append([approx_source, [(j, station_number)]])
             seg_length = source.distance(target)
             n_stations = math.floor(seg_length/710)
             # we compute the number of stations on the segment (given that the
@@ -195,9 +194,9 @@ def generate_stations(bended_lines, variance):
                 x = i*dist_between_stations*(x2-x1)/seg_length+x1
                 x = np.random.normal(x, variance)
                 y = np.random.normal(y, variance)
-                stations.append((Point(int(x), int(y)), [(j, station_number)]))
+                stations.append([Point(int(x), int(y)), [(j, station_number)]])
             station_number += 1
-            stations.append((Point(int(x2), int(y2)), [(j, station_number)]))
+            stations.append([Point(int(x2), int(y2)), [(j, station_number)]])
     return stations
 
 
@@ -257,7 +256,7 @@ def glue_stations(outliers, clusters, stations):
                         
                         
         center = np.mean(points, axis=0)
-        centers.append((Point(int(center[0]), int(center[1])), lines_crossing))
+        centers.append([Point(int(center[0]), int(center[1])), lines_crossing])
     for outlier in outliers:
         centers.append(stations[outlier])
     return (centers)
@@ -297,7 +296,7 @@ def remove_duplicates(stations, glued_inter):
                 crossing_lines.append(stations[station_id][1][0][0])
                 numbers.append(stations[station_id][1][0][1])
                 ids_to_del.append(station_id)
-            stations.append((inter_point, list(zip(crossing_lines, numbers))))
+            stations.append([inter_point, list(zip(crossing_lines, numbers))])
     ids_to_del = sorted(ids_to_del, reverse=True)
     for station_id in ids_to_del:
         del stations[station_id]
@@ -325,7 +324,6 @@ def compute_hubs(stations):
         point_to_id[station[0]] = i
     n_stations = len(stations)
     n_hubs = int(0.1*n_stations)
-    print(n_hubs, "hubs will be generated")
     points = sorted(lines_per_station, key=lines_per_station.get, reverse=True)
     points = points[:n_hubs]
     return [(point, lines_per_station[point], (stations[point_to_id[point]])[1]) for point in points]
@@ -376,10 +374,6 @@ def build_fast_lines(hubs, mu, sigma):
     return [fast_line for fast_line in fast_lines if len(fast_line) > 3]
 
 
-##################
-# Data synthesis #
-##################
-
 def update_compatibilities(stations, fast_lines):
     fast_lines_names = list(ascii_uppercase) 
     stations_points = [station[0] for station in stations]
@@ -389,19 +383,6 @@ def update_compatibilities(stations, fast_lines):
             stations[i][1].append((fast_lines_names[j], k))
     return stations
 
-
-def build_lines_dict(stations, names):
-    lines_dict = defaultdict(list)
-    for station in stations:
-        point = station[0]
-        lines_and_numbers = station[1]
-        lines, numbers = zip(*lines_and_numbers)
-        lines = list(lines)
-        numbers = list(numbers)
-        point_name = names.pop()
-        for line, number in lines_and_numbers:
-            lines_dict[line].append([point, number, point_name])
-    return lines_dict
 
 if __name__ == '__main__':
 	print("hello")

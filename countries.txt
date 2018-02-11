@@ -330,9 +330,9 @@ Palau (L, PR)
 Belau (L, PR)	la République des Palaos
 Drapeau : Palestine	
 l'État de Palestine
-Drapeau : Panamá	le Panama (CNT, OIT, ONU, SQ, SS, UE)
-le Panamá (L, PR)	la République du Panama (CNT, OIT, ONU, SQ, SS, UE)
-la république de Panamá (L, PR)
+Drapeau : Panama	le Panama (CNT, OIT, ONU, SQ, SS, UE)
+le Panama (L, PR)	la République du Panama (CNT, OIT, ONU, SQ, SS, UE)
+la république de Panama (L, PR)
 Drapeau : Papouasie-Nouvelle-Guinée	la Papouasie-Nouvelle-Guinée
 la Papouasie - Nouvelle-Guinée (UE)	la Papouasie-Nouvelle-Guinée (CNT, L, OIT, PR, SS)
 l'État indépendant de Papouasie-Nouvelle-Guinée (ONU, SQ)

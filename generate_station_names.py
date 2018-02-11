@@ -1,8 +1,14 @@
 import re
 import numpy as np
+import csv
 
 
-def find_country_names():
+
+####################
+# Import functions #
+####################
+
+def fetch_countries():
     page = open("countries.txt", "r")
     page = str(page.read())
 
@@ -24,6 +30,51 @@ def find_country_names():
                 country_names[country_name] = link_words_to_enter[link_word]
     return country_names
 
+def fetch_names():
+    names = {}
+    file = open("names.txt", "r")
+    file = str(file.read())
+    file = file.split("\n")
+    for item in file:
+        name, gender = item.split(', ')
+        names[name] = gender
+    return names
+
+
+def fetch_first_names():
+    first_names = {}
+    file = open("first_names.csv", "r", encoding = "ISO-8859-1")
+    for line in file:
+        if 'french' in line:
+            line = line.split(';')
+            name = line[0]
+            gender = restrict_gender(line[1])
+            if '(' in name:
+                i = name.index('(')
+                name = name[:i]
+            name = name.capitalize()
+            first_names[name] = gender
+    return first_names
+
+
+####################
+# Helper functions #
+####################
+
+def restrict_gender(gender):
+    if ',' in gender:
+        prob_f = np.random.binomial(1, .5)
+        if prob_f:
+            return gender[0]
+        else:
+            return gender[2]
+    return gender
+
+
+def keep_family_name(name):
+    parts = name.split()
+    return parts[-1]
+
 
 def rectify_unbreakable(name):
     if '&' in name:
@@ -32,115 +83,121 @@ def rectify_unbreakable(name):
     else:
         return name
 
+def take_first_if_composed(name):
+    if '-' in name:
+        i = name.index('-')
+        return name[:i]
+
+def build_saint_name(first_name, first_names_to_gender):
+    gender = first_names_to_gender[first_name]
+    saint = ""
+    if gender == 'm':
+        saint = "Saint"
+    else:
+        saint = "Sainte"
+    return saint + " " + first_name
+
+
+###################
+# Name generation #
+###################
+
 def generate_names(n_stations):
-    station_names = set()
-    link_words = find_country_names()
-    states = list(link_words.keys())
+    station_names = []
+
     churches = ["Basilique", "Eglise", "Cathédrale"]
     places = ['Place', 'Rue', 'Avenue', 'Gare', 'Pont', 'Quai']
-    names = ['Victor Hugo', 'Guy de Maupassant', 'John F. Kennedy',
-             'Franklin D. Roosevelt', 'Gustave Eiffel', 'Adèle Mortier',
-             'Louis Cohen', 'Richelieu', 'Marguerite Duras',
-             'Nathalie Sarraute', 'Félix Faure', 'Mazarin', 'Danton',
-             'Maître&Gims', 'Emmanuel Macron', 'Nicolas Sarkozy',
-             'Johnny Hallyday', 'Booba', 'Claude François', 'Voltaire',
-             "Jeanne&d'Arc", "Napoléon Bonaparte", "René Descartes",
-             "Blaise Pascal", "Molière", "Claude Monet", "Louis Pasteur",
-             "Marie Curie", "Marcel Pagnol", "Edit Piaf", "Turgot", "Necker",
-             "Sully", "Jean Jaurès", "Auguste Renoir", "Serge Gainsbourg",
-             "Georges Brassens", "Lorie", "Florent Pagny", "Céline Dion",
-             "Nabilla", "Jean-Paul Sartre", "Boris Vian", "Albert Camus",
-             "Charles Aznavour", "Jean Moulin", "Emile Zola", "David Douillet",
-             "Jacques Prévert", "Yannick Noah", "Jean Cocteau", "Jean Ferrat",
-             "Louis Lumière", "Daniel Balavoine", "Gérard&Philipe",
-             "Françoise Dolto", "David Guetta", "Bourvil", "Coluche",
-             "Charlemagne", "Zinédine Zidane", "Franck Ribéry",
-             "Michel Platini", "Jacques Chirac", "Francis Cabrel",
-             "Simone Veil", "Joséphine Baker", "Marlène Dietrich",
-             "Anne Frank", "Simone de Beauvoir", "Françoise Sagan",
-             "Brigitte Bardot", "Mylène Farmer", "Saint-Louis", "Hugues&Capet",
-             "Philippe&Auguste", "François&1er"]
+
+    country_to_link = fetch_countries()
+    countries = list(country_to_link.keys())
+
+    names_to_gender = fetch_names()
+    names = list(names_to_gender.keys())
+
+    first_names_to_gender = fetch_first_names()
+    first_names = list(first_names_to_gender.keys())
     while len(station_names) < n_stations:
-        if (not names) or (not states):
-            break
         station_name = ""
-        prob_places = np.random.binomial(1, .4)
-        place = np.random.choice(places)
-        state = np.random.choice(states)
-        name = np.random.choice(names)
-        if prob_places == 1:
-            # something like "Place ..."
-            station_name = place
-            prob_state = np.random.binomial(1, .3)
-            if prob_state == 1:
-                # something like "Place de l'Argentine"
-                station_name = station_name + " " + link_words[state] \
-                               + state
-                del states[states.index(state)]
-            else:
-                prob_saint = np.random.binomial(1, .2)
-                if prob_saint == 1:
-                    # something like "Place Sainte Marie"
-                    name = rectify_unbreakable(name)
-                    name = name.split()[0]
-                    if name[-1] == 'e':
-                        station_name = station_name + " Sainte " + name
-                    else:
-                        station_name = station_name + " Saint " + name
+        prob_place = np.random.binomial(1, .4)
+        if prob_place:
+            # something like Place ...
+            place = np.random.choice(places)
+            station_name = station_name + place + " "
+            prob_name = np.random.binomial(1, .4)
+            if prob_name:
+                prob_saint = np.random.binomial(1, .1)
+                if prob_saint:
+                    # something like Place Sainte Marie
+                    first_name = np.random.choice(first_names)
+                    saint_name = build_saint_name(first_name,
+                                                  first_names_to_gender)
+                    station_name = station_name + saint_name
+                    del first_names[first_names.index(first_name)]
                 else:
-                    # something like "Place Edit Piaf"
-                    true_name = rectify_unbreakable(name)
-                    station_name = station_name + " " + true_name
-                    del names[names.index(name)]
-
-        else:
-            prob_state = np.random.binomial(1, .2)
-            if prob_state == 1:
-                prob_saint = np.random.binomial(1, .2)
-                if prob_saint == 1:
-                    # something like "Notre Dame de l'Argentine"
-                    station_name = station_name + " Notre Dame " \
-                                    + link_words[state] + state
-                else:
-                    # something like "Argentine"
-                    station_name = state
-                del states[states.index(state)]
-            else:
-                prob_second_name = np.random.binomial(1, 0.5)
-                if prob_second_name == 1:
-                    # something like "Faidherbe-Chaligny"
-                    name1 = name.split()[-1]
-                    name1 = rectify_unbreakable(name1)
-                    station_name = station_name + name1
-                    del names[names.index(name)]
-
+                    # something like Place Marcel Pagnol
                     name = np.random.choice(names)
-                    name2 = name.split()[-1]
-                    name2 = rectify_unbreakable(name2)
-                    station_name = station_name + "-" + name2
+                    true_name = rectify_unbreakable(name)
+                    station_name = station_name + true_name
                     del names[names.index(name)]
-
+            else:
+                # something like Place de l'Argentine
+                country = np.random.choice(countries)
+                link = country_to_link[country]
+                station_name = station_name + link + country
+                del countries[countries.index(country)]
+        else:
+            # something like Gustave Eiffel, Saint Basile, Argentine ...
+            prob_name = np.random.binomial(1, .7)
+            if prob_name:
+                # something like Saint Basile, Felix Faure...
+                prob_saint = np.random.binomial(1, .2)
+                if prob_saint:
+                    # something like (Cathédrale) Saint Basile
+                    first_name = np.random.choice(first_names)
+                    station_name = build_saint_name(first_name,
+                                                    first_names_to_gender)
+                    del first_names[first_names.index(first_name)]
+                    prob_church = np.random.binomial(1, .3)
+                    if prob_church:
+                        church = np.random.choice(churches)
+                        station_name = church + " " + station_name
                 else:
-                    prob_saint = np.random.binomial(1, .4)
-                    if prob_saint == 1:
-                        prob_church = np.random.binomial(1, .3)
-                        if prob_church == 1:
-                            # something like "Eglise Sainte Marie"
-                            church_type = np.random.choice(churches)
-                            station_name = station_name + church_type
-                        name = name.split()[0]
-                        # something like "(Eglise)" Saint Maxime
-                        if name[-1] == 'e':
-                            station_name = station_name + " " + "Sainte " + name
-                        else:
-                            station_name = station_name + " " + "Saint " + name
+                    prob_2_names = np.random.binomial(1, .6)
+                    if prob_2_names:
+                        # something like Faidherbe-Chaligny
+                        name1 = np.random.choice(names)
+                        del names[names.index(name1)]
+                        name2 = np.random.choice(names)
+                        del names[names.index(name2)]
+
+                        true_name1 = rectify_unbreakable(name1)
+                        true_name2 = rectify_unbreakable(name2)
+                        true_name1 = keep_family_name(true_name1)
+                        true_name2 = keep_family_name(true_name2)
+                        station_name =  true_name1 + "-" + true_name2
                     else:
-                        # something like "Louis Lumière"
-                        station_name = station_name + rectify_unbreakable(name)
+                        # something like Georges Brassens
+                        name = np.random.choice(names)
+                        true_name = rectify_unbreakable(name)
+                        station_name = true_name
                         del names[names.index(name)]
-        station_names.add(station_name)
+
+            else:
+                # something like Argentine
+                country = np.random.choice(countries)
+                station_name = country
+                del countries[countries.index(country)]
+        station_names.append(station_name)
     return station_names
 
+
+def add_names(names, stations):
+    for i, name in enumerate(names):
+        stations[i].append(name)
+    return stations
+
+
+
 if __name__ == "__main__":
-    names = generate_names(50)
+    names = generate_names(150)
     print(names)
