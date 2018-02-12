@@ -2,6 +2,7 @@ import generate_transportation_schedule as sch
 import generate_station_names as nm
 import generate_transportation_geometry as geo
 import transportation_display as dis
+import generate_transportation_xml as xml
 
 
 if __name__ == "__main__":
@@ -41,37 +42,13 @@ if __name__ == "__main__":
     #dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
 
     updated_stations = geo.update_compatibilities(filtered_stations, fast_lines)
-    # problem in this function
-
-
-
     names = nm.generate_names(len(updated_stations))
     updated_stations = nm.add_names(names, updated_stations)
     lines_dict = sch.build_lines_dict(updated_stations)
     lines_dict = sch.remove_gaps_in_ordering(lines_dict)
-
-
-
     lines_dict = sch.compute_whole_schedule(lines_dict, 'friday')
 
-    for i, line in lines_dict.items():
-        print('LINE :', i )
-        for station in line:
-            print(station[0], "     ", station[1], "    ", station[2])
-
-    print("TEST GAPS")
-    for line in lines_dict.values():
-        numbers = []
-        for station in line:
-            numbers.append(station[1])
-        print(sorted(numbers))
+    xml.generate_xml(lines_dict)
 
 
-
-    print("TEST SCHEDULE")
-
-    k = 35
-    line = lines_dict[4]
-    for station in line:
-        print(station[2], "     ", station[1], "     ", station[3][k])
 
