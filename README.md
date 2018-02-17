@@ -12,8 +12,13 @@ The 'slow' lines generation was the biggest part of the job. We built them as fo
 4. we computed the **theoretical positions of the stations** for each subway line. To compute the position of these theoretical stations, we first put the terminals at the end of the first and last segment of the line (recall that a subway line is a list of segment). Then, we graduated the lines s.t. the theoretical stations were approx. 710 meters away from one another (710 meters being the average distance between two consecutive stations in the parisian Métro)
 5. we computed the **true positions of the stations** according to the theoretical positions, using a gaussian two-dimensionnal distribution centered on the theoretical position
 6. we **merged the stations** that were too close from one another, using again DBSCAN
-7. we computed the **biggest hubs** of the network, i.e. the stations were a lot of subway lines were crossing
-8. we generated the **fast lines** that should cross these hubs. First we generated random segments as for the slow lines. Then we computed, for each of these segments, the closest hubs using the sympy distance function (between a point and a line) and a certain distance threshold. We bended the segments s.t. the fast lines cam through the hubs close to them. We kept only the lines that were crossing enough hubs (4). 
+
+The 'fast' lines generation was more easier :
+1. we computed the **biggest hubs** of the network, i.e. the stations were a lot of subway lines were crossing
+2. we generated **random segments** as for the slow lines.
+3. we computed the **closest hubs w.r.t each segment**. To this aim, we usedd the sympy distance function (distance between a point and a line), and considered a hub was 'close enough' from a line if the distance between the hub and the line was below and a certain threshold.
+4. We **bended the segments** s.t. the fast lines came through the hubs close to them.
+5. we kept only the lines that were crossing enough hubs (typically 4). 
 
 ### Toponymy
 We generated random names for the stations we created. This implied to have a database for the names to combine together, and a method to combine names s.t. the combination makes sense.
@@ -22,6 +27,13 @@ To create the databsases, we used differents ressources:
 - for the famous people names, we created a list manually
 - for the first names (that appear in station names like Saint Marcel), we used a dataset provided by Data.gouv.fr (https://www.data.gouv.fr/fr/datasets/liste-de-prenoms/). Since the dataset was quite huge, we just selected names that were labeled as 'French'
 
+To combine the different elements, we thought of a station as the result of a probabilistic tree. The output of our tree has roughly 4 forms:
+- a urban element plus a name (famous person or saint something)
+- a urban element plus a country name
+- a simple name (famous person or saint something or religious place plus saint something)
+- a simple country name
+
+A more detailed version of this kind of grammar can be found above, using regular expressions.
 
 ```
 Ɛ ...
@@ -68,3 +80,7 @@ To create the databsases, we used differents ressources:
 ```
 
 ### Schedule 
+For each station, we had to generate a schedule, i.e. a list of times when a train arrives at the station, in one direction or the other. We thus had to generate a 'forward' schedule and a 'backward' schedule. For each subway line and given the stations' coordinates, we proceeded as follows:
+1. we computed the distances between each adjacent stations, and then the time to go from one station to the next one, depending on the speed on the line (recall that we have 'slow' lines and 'fast' lines)
+2. we generated the first departure and arrival times (backward and forward) at the terminals, depending of the day (+1 for the last departure/arrival if we are Friday or Saturday), and following a uniform distribution (between 5:30 and 6:00 te morning, 0:30 and 1:30 the night)
+3. as many times as needed (i.e. until we reached the last departure time), we generated new departures from the terminals with a variable frequency (more frequent the morning and the evenning), and propagated the times using the time intervals computed in the first step. We allowed small gausain variations that we added to the time intervals (approx. 10 seconds)
