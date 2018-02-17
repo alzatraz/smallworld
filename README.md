@@ -13,7 +13,7 @@ The 'slow' lines generation was the biggest part of the job. We built them as fo
 5. we computed the **true positions of the stations** according to the theoretical positions, using a gaussian two-dimensionnal distribution centered on the theoretical position
 6. we **merged the stations** that were too close from one another, using again DBSCAN
 
-The 'fast' lines generation was more easier :
+The 'fast' lines generation was easier :
 1. we computed the **biggest hubs** of the network, i.e. the stations were a lot of subway lines were crossing
 2. we generated **random segments** as for the slow lines.
 3. we computed the **closest hubs w.r.t each segment**. To this aim, we usedd the sympy distance function (distance between a point and a line), and considered a hub was 'close enough' from a line if the distance between the hub and the line was below and a certain threshold.
@@ -25,13 +25,13 @@ We generated random names for the stations we created. This implied to have a da
 To create the databsases, we used differents ressources:
 - for the country names, we scrapped a Wikipedia page (https://fr.wikipedia.org/wiki/Liste_des_pays_du_monde), using regular expressions.This allowed to capture, in addition to the country names themselves, the way to combine them (the article 'of' in French depends on the grammatical gender, and countries can have unexpected genders...).
 - for the famous people names, we created a list manually
-- for the first names (that appear in station names like Saint Marcel), we used a dataset provided by Data.gouv.fr (https://www.data.gouv.fr/fr/datasets/liste-de-prenoms/). Since the dataset was quite huge, we just selected names that were labeled as 'French'
+- for the first names (that appear in station names like Saint Marcel), we used a dataset provided by Data.gouv.fr (https://www.data.gouv.fr/fr/datasets/liste-de-prenoms/). The advantage of this dataset was that it also contained gender informations, which was useful to determine easily which of "Sainte Marie" and "Saint Marie" was correct. Since the dataset was quite huge, we just selected names that were labeled as 'french'
 
-To combine the different elements, we thought of a station as the result of a probabilistic tree. The output of our tree has roughly 4 forms:
-- a urban element plus a name (famous person or saint something)
-- a urban element plus a country name
-- a simple name (famous person or saint something or religious place plus saint something)
-- a simple country name
+To combine the different elements, we thought of a station name as the result of a probabilistic tree. The output of our tree could roughly have four forms:
+- a urban element plus a name (famous person or saint something) : Place Emile Zola
+- a urban element plus a country name : Place de la Grèce
+- a simple name (famous person or saint something or religious place plus saint something) : Emile Zola
+- a simple country name : Grèce
 
 A more detailed version of this kind of grammar can be found above, using regular expressions.
 
@@ -78,6 +78,8 @@ A more detailed version of this kind of grammar can be found above, using regula
     │
     └───... (Pérou|Argentine|Suisse...)
 ```
+
+We had to do small tricks for names that were kind of unbreakable, like "Jeane d'Arc" for instance ("Rue d'Arc" is not really correct). We added some fanciful names to the "famous people" section, for instance national icons like Booba, Nabilla, Johny Hallyday or Mylène Farmer.
 
 ### Schedule 
 For each station, we had to generate a schedule, i.e. a list of times when a train arrives at the station, in one direction or the other. We thus had to generate a 'forward' schedule and a 'backward' schedule. For each subway line and given the stations' coordinates, we proceeded as follows:
