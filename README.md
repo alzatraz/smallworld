@@ -16,38 +16,55 @@ The 'slow' lines generation was the biggest part of the job. We built them as fo
 8. we generated the **fast lines** that should cross these hubs. First we generated random segments as for the slow lines. Then we computed, for each of these segments, the closest hubs using the sympy distance function (between a point and a line) and a certain distance threshold. We bended the segments s.t. the fast lines cam through the hubs close to them. We kept only the lines that were crossing enough hubs (4). 
 
 ### Toponymy
-We generated random names for the stations we created. 
+We generated random names for the stations we created. This implied to have a database for the names to combine together, and a method to combine names s.t. the combination makes sense.
+To create the databsases, we used differents ressources:
+- for the country names, we scrapped a Wikipedia page (https://fr.wikipedia.org/wiki/Liste_des_pays_du_monde), using regular expressions.This allowed to capture, in addition to the country names themselves, the way to combine them (the article 'of' in French depends on the grammatical gender, and countries can have unexpected genders...).
+- for the famous people names, we created a list manually
+- for the first names (that appear in station names like Saint Marcel), we used a dataset provided by Data.gouv.fr (https://www.data.gouv.fr/fr/datasets/liste-de-prenoms/). Since the dataset was quite huge, we just selected names that were labeled as 'French'
+
 
 ```
-$\epsilon$
+Ɛ ...
 │
-└───... Place|Rue|Avenue|Gare|Pont|Quai ...
+└───... (Place|Rue|Avenue|Gare|Pont|Quai) ...
 │   │
-│   └───... Saint(e|€)...
+│   └───... Saint(e|Ɛ)...
 │   │   │
-│   │   └───... Sainte Marie
+│   │   └───... Sainte (Marie|Françoise|Emma...)
 │   │   │   
-│   │   └───... Saint Joseph
+│   │   └───... Saint (Joseph|Marc|Louis...)
 │   │
-│   └───... (Marcel) Pagnol
+│   └───... (Marcel|Emile|Guy...|Ɛ) (Pagnol|Zola|de Maupassant...)
 │   │   │
-│   │   └───... Marcel Pagnol
+│   │   └───... (Marcel Pagnol|Emile Zola|Guy de Maupassant...)
 │   │   │   
-│   │   └───... Pagnol
+│   │   └───... (Pagnol|Zola|Maupassant...)
 │   │ 
-│   └───... de l'Argentine 
+│   └───... (de l'Argentine|du Pérou|de la Suisse...)
 │   
-└───...
+└───... Ɛ ...
     │
-    └───... (Basilique/Eglise/Cathédrale) (Saint(e)) Marcel (Pagnol)
+    └───... (Basilique|Eglise|Cathédrale|Ɛ) (Saint(e|Ɛ)|Ɛ) (Marcel|Emile|Guy...) (Pagnol|Zola|de Maupassant...|Ɛ)
     │   │   
-    │   └───... (Basilique/Eglise/Cathédrale) Saint Marcel
-    │       │
-    │       └─── Basilique/Eglise/Cathédrale Saint Marcel
-    │       │
-    │       └─── Saint Marcel
+    │   └───... (Basilique|Eglise|Cathédrale|Ɛ) Saint(e|Ɛ) (Marcel| Emilie...)
+    │   │   │
+    │   │   └───(Basilique|Eglise|Cathédrale) Saint(e|Ɛ) (Marcel| Emilie...)
+    │   │   │   │
+    │   │   │   └───(Basilique|Eglise|Cathédrale) Sainte (Emilie|Clothilde|Lucie...)
+    │   │   │   │
+    │   │   │   └───(Basilique|Eglise|Cathédrale) Saint (Marcel|Mathieu|Louis...)
+    │   │   │
+    │   │   └───Saint(e|Ɛ) (Marcel|Emilie...)
+    │   │       │
+    │   │       └───Sainte (Emilie|Clothilde|Lucie...)
+    │   │       │
+    │   │       └───Saint (Marcel|Mathieu|Louis...)
+    │   │
+    │   └───... (Marcel Pagnol|Guy de Maupassant|Olympe de Gouges...)
+    │   │
+    │   └───... (Pagnol-Maupassant|Zola-Pagnol...)
     │
-    └───... Pérou
+    └───... (Pérou|Argentine|Suisse...)
 ```
 
 ### Schedule 
