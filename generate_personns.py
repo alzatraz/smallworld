@@ -1,17 +1,26 @@
 import numpy as np 
 import random 
 import math
+import pylab as pl
+from matplotlib import collections  as mc
+
 
  
 
 
 ############ global variables ###############
 
+########## dont touch###########
 pi = 3.14159265359 
+color_work = (1, 0, 0, 1)
+color_activity = (0, 1, 0, 1)
+color_home = (0, 0, 1, 1)
 
-nb_of_days = 7
-p_outing_work = .15
-p_outing_not_work = .6
+########## play with that###########
+nb_of_days = 1
+p_outing_work = 1
+p_outing_not_work = 1
+size_pop = 2
 
 r_center_paris = 3000
 max_r = 10000
@@ -146,21 +155,6 @@ class Personn:
 	def print_p(self):
 		print( self.work_place, self.home)
 
-	def set_age(age):
-		self.age = age
-
-	def set_work(work):
-		self.work = work
-	
-	def set_home(home):
-		self.home = home
-
-	def set_activities(activities):
-		self.activities =activities
-
-	def add_activity(activity):
-		self.activities.append(activity)
-
 	def is_working(self,d):
 		return(self.work.days_worked[d%7])
 
@@ -183,13 +177,13 @@ class Personn:
 				if(r<p_outing_work):
 					a = self.random_activity()
 					a_real = Activity_real(a,self,d)
-					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1], a_real.type )  )
+					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1], "activity" )  )
 
 			else:
 				if(r<p_outing_not_work):
 					a = self.random_activity()
 					a_real = Activity_real(a,self,d)
-					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1] , a_real.type )  )				
+					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1] , "activity" )  )				
 
 	def compute_deplacement(self):
 		for day in range(nb_of_days):
@@ -200,7 +194,7 @@ class Personn:
 				act_loc = loc
 				self.travels.append(d1)
 			if(act_loc!=self.home):
-				d1 = Deplacement(act_loc , self.home ,day, end,"rentrer maison")
+				d1 = Deplacement(act_loc , self.home ,day, end,"home")
 				self.travels.append(d1)
 
 
@@ -245,20 +239,40 @@ def random_in_area(pos, radius):
 
 ###################### localisation of activities ##########################
 
- ################# generating typical types ###############################
+def random_location_one(nb_to_put):
+	l_loc = []
+	w = int(math.sqrt(nb_to_put))
+	for x in range(w):
+		for y in range(w):
+			l_loc.append((x*max_r/w+random.random()*500,y*max_r/w+random.random()*500))
+	return(l_loc)
 
+
+def random_location_grosseries():
+	nb_to_put = max_r*max_r*pi/1000000*density_grosseries_outer
+	return(random_location_one(nb_to_put))
+
+def random_location_sport():
+	nb_to_put = 36
+	return(random_location_one(nb_to_put))
+
+def random_location_cinema():
+	nb_to_put = 49
+	return(random_location_one(nb_to_put))
+
+
+ ################# generating typical types ###############################
 ################# typical working type #######################################
 work_no_work = Work("no work", (0,0) ,[False, False, False, False	, False, False, False ] )
 work_white_collar = Work("white collar", (9,19) ,[True, True, True, True, True, False, False ] )
 work_student = Work("school", (8,17) ,[True, True, False, True, True, False, False ] )
 
 ################# typical activities #####################################
-act_cinema  = Activity_theoric([(100,10)], "cinema", (9,22),1.5)
-act_balade  = Activity_theoric([(100,10)], "balade", (9,19),1)
-act_sport  = Activity_theoric([(100,10)], "sport", (9,19),1)
-act_grosseries = Activity_theoric([(100,10)], "grosseries", (9,19),.5)
+act_cinema  = Activity_theoric(random_location_cinema(), "cinema", (9,22),1.5)
+act_sport  = Activity_theoric(random_location_sport(), "sport", (9,19),1)
+act_grosseries = Activity_theoric(random_location_grosseries(), "grosseries", (9,19),.5)
 
-act_student = [act_cinema, act_balade, act_sport]
+act_student = [act_cinema, act_sport]
 act_white_collar = [act_cinema, act_grosseries, act_sport]
 
 
@@ -286,22 +300,77 @@ def generate_white_collar():
 	return(person_wc)
 
 
+
+##################### displaying travels####################
+
+def clean_travel(d):
+	col = color_home
+	if d.tag=="activity":
+		col = color_activity
+	if d.tag=="work":
+		col = color_work
+	return([d.start, d.end],col)
+
+def display_activities(cinemas, grosseries, sports):
+	l_x = []
+	l_y = []
+	for (x,y) in cinemas:
+		l_x.append(x)
+		l_y.append(y)
+	pl.plot(l_x, l_y, 'ko')
+	l_x = []
+	l_y = []
+	for (x,y) in grosseries:
+		l_x.append(x)
+		l_y.append(y)
+	pl.plot(l_x, l_y, 'yo')
+	l_x = []
+	l_y = []
+	for (x,y) in sports:
+		l_x.append(x)
+		l_y.append(y)
+	pl.plot(l_x, l_y, 'mo')
+
+
+
+
+def display_travels(list_p, day):
+	to_disp =[]
+	colors =[]
+	for p in list_p:
+		l_t = p.travels
+		for t in l_t:
+			to_print = clean_travel(t)
+			to_disp.append(to_print[0])
+			colors.append(to_print[1])
+	lc = mc.LineCollection(to_disp,colors=colors,linewidths=1)
+	fig, ax = pl.subplots()
+	ax.add_collection(lc)
+	ax.autoscale()
+	ax.margins(0.1)
+
 ######################## lets do tests #######################
 
 
-
-nb_test = 4500
-for i in range(nb_test):
-	if 100*i%(nb_test)==0:
-		print(100*i/(nb_test))
+l_p = []
+for i in range(size_pop):
+	if 100*i%(size_pop)==0:
+		print(100*i/(size_pop))
 	person_student = generate_student()
 	person_wc = generate_white_collar()
+	l_p.append(person_student)
+	l_p.append(person_wc)
 
+display_travels(l_p, 0)
+display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
+pl.show()
 
+print("\n student ")
 
 for d in person_student.travels:
 	d.print_d()
 
+print("\n white collar travels : ")
 
 for d in person_wc.travels:
 	d.print_d()
