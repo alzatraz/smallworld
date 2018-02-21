@@ -3,6 +3,7 @@ import random
 import math
 import pylab as pl
 from matplotlib import collections  as mc
+from matplotlib.patches import Circle, Wedge, Polygon
 
 
  
@@ -20,7 +21,7 @@ color_home = (0, 0, 1, 1)
 nb_of_days = 1
 p_outing_work = 1
 p_outing_not_work = 1
-size_pop = 2
+size_pop = 35
 
 r_center_paris = 3000
 max_r = 10000
@@ -244,7 +245,7 @@ def random_location_one(nb_to_put):
 	w = int(math.sqrt(nb_to_put))
 	for x in range(w):
 		for y in range(w):
-			l_loc.append((x*max_r/w+random.random()*500,y*max_r/w+random.random()*500))
+			l_loc.append((2*x*max_r/w-max_r+random.random()*1000,2*y*max_r/w-max_r+random.random()*1000))
 	return(l_loc)
 
 
@@ -348,6 +349,10 @@ def display_travels(list_p, day):
 	ax.add_collection(lc)
 	ax.autoscale()
 	ax.margins(0.1)
+	circle1 = Circle((0, 0), r_center_paris,color = 'r', alpha = .1)
+	circle2 = Circle((0, 0), max_r,color = 'blue', alpha = .1)
+	ax.add_artist(circle1)
+	ax.add_artist(circle2)
 
 ######################## lets do tests #######################
 
@@ -361,8 +366,9 @@ for i in range(size_pop):
 	l_p.append(person_student)
 	l_p.append(person_wc)
 
+
 display_travels(l_p, 0)
-display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
+#display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
 pl.show()
 
 print("\n student ")
