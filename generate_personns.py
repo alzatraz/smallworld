@@ -2,12 +2,34 @@ import numpy as np
 import random 
 import math
 
+ 
+
 
 ############ global variables ###############
-nb_of_days = 14
-p_outing_work = .1
-p_outing_not_work = .5
-#############################################
+
+pi = 3.14159265359 
+
+nb_of_days = 7
+p_outing_work = .15
+p_outing_not_work = .6
+
+r_center_paris = 3000
+max_r = 10000
+p_live_center = .1
+p_work_center = .8
+
+density_cinema_center = 97/105.1
+density_cinema_outer = .2
+
+density_sport_center = .5
+density_sport_outer = .5
+
+density_grosseries_center = .5
+density_grosseries_outer = .5
+
+
+
+################# basic fonctions ##################
 
 def distance(p1,p2):
 	return(math.sqrt( (p1[0]-p2[0])*(p1[0]-p2[0])+(p1[1]-p2[1])*(p1[1]-p2[1])))
@@ -33,6 +55,8 @@ def choose_place(possible_places, origin):
 				best_pos = pos
 		return(best_pos)
 
+######################### main classes #######################
+
 class Deplacement:
 	def __init__(self):
 		self.start = (0,0)
@@ -56,7 +80,7 @@ class Deplacement:
 		self.tag = tag
 
 	def print_d(self):
-		print(self.start,self.end,self.day,self.hour,self.tag)
+		print(self.day,self.hour,self.start,self.end,self.tag)
 
 
 	
@@ -107,17 +131,21 @@ class Personn:
 		self.planning = {}
 		self.travels  = []
 
-	def __init__(self,age,home,work,activities):
+	def __init__(self,age,home,work_place,work,activities):
 		self.name = "pablo"
-		self.family = []
 		self.work = work
-		self.work_place = (0,0)
+		self.work_place = work_place
 		self.age = age
 		self.home = home
 		self.activities = activities
 		self.planning = []
 		self.travels  = []
-	
+		self.family = []
+		
+
+	def print_p(self):
+		print( self.work_place, self.home)
+
 	def set_age(age):
 		self.age = age
 
@@ -163,9 +191,6 @@ class Personn:
 					a_real = Activity_real(a,self,d)
 					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1] , a_real.type )  )				
 
-
-
-
 	def compute_deplacement(self):
 		for day in range(nb_of_days):
 			to_do = self.planning[day]
@@ -179,17 +204,48 @@ class Personn:
 				self.travels.append(d1)
 
 
-#################################################
+
+############### localisation choice ##################
 
 
-def make_possible_activities_manual():
-	possible_activities = []
-	possible_activities.append(Activity_theoric([(100,10)], "cinema", (9,22),1.5))
-	possible_activities.append(Activity_theoric([(100,10)], "grosseries", (9,19),.5))
-	return(possible_activities)
+def random_home_location():
+	if random.random()<p_live_center:
+		theta = random.random()*pi*2
+		r = random.random()*r_center_paris
+		x = r*math.cos(theta)
+		y = r*math.sin(theta)
+	else:
+		theta = random.random()*pi*2
+		r = random.random()*(max_r-r_center_paris)+r_center_paris
+		x = r*math.cos(theta)
+		y = r*math.sin(theta)
+	return((x,y))
 
-######################## lets do tests #######################
 
+def random_work_location():
+	if random.random()<p_work_center:
+		theta = random.random()*pi*2
+		r = random.random()*r_center_paris
+		x = r*math.cos(theta)
+		y = r*math.sin(theta)
+	else:
+		theta = random.random()*pi*2
+		r = random.random()*(max_r-r_center_paris)+r_center_paris
+		x = r*math.cos(theta)
+		y = r*math.sin(theta)
+	return((x,y))
+
+
+def random_in_area(pos, radius):
+	theta = random.random()*pi*2
+	r = random.random()*radius
+	x = pos[0]+r*math.cos(theta)
+	y = pos[1]+r*math.sin(theta)
+	return((x,y))
+
+###################### localisation of activities ##########################
+
+ ################# generating typical types ###############################
 
 ################# typical working type #######################################
 work_no_work = Work("no work", (0,0) ,[False, False, False, False	, False, False, False ] )
@@ -202,18 +258,50 @@ act_balade  = Activity_theoric([(100,10)], "balade", (9,19),1)
 act_sport  = Activity_theoric([(100,10)], "sport", (9,19),1)
 act_grosseries = Activity_theoric([(100,10)], "grosseries", (9,19),.5)
 
-act = [act_cinema, act_balade, act_sport]
+act_student = [act_cinema, act_balade, act_sport]
+act_white_collar = [act_cinema, act_grosseries, act_sport]
 
-nb_test = 100000
-for i in range(nb_test):
-	if 100*i%(nb_test)==0:
-		print(100*i/(nb_test))
-	person_student = Personn(12,  (5,5), work_student, act)
+
+##################### generating personns ##########################################
+
+def generate_student():
+	age = int(10 + random.random()*10)
+	home_loc = random_home_location()
+	work_loc = random_in_area(home_loc, 1000)
+	person_student = Personn(age, home_loc, work_loc , work_student, act_student)
 	person_student.add_job()
 	person_student.add_activities()
 	person_student.compute_deplacement()
+	return(person_student)
+
+
+def generate_white_collar():
+	age = int(20 + random.random()*40)
+	home_loc = random_home_location()
+	work_loc = random_work_location()
+	person_wc = Personn(age, home_loc, work_loc , work_white_collar, act_white_collar)
+	person_wc.add_job()
+	person_wc.add_activities()
+	person_wc.compute_deplacement()
+	return(person_wc)
+
+
+######################## lets do tests #######################
+
+
+
+nb_test = 4500
+for i in range(nb_test):
+	if 100*i%(nb_test)==0:
+		print(100*i/(nb_test))
+	person_student = generate_student()
+	person_wc = generate_white_collar()
+
 
 
 for d in person_student.travels:
 	d.print_d()
 
+
+for d in person_wc.travels:
+	d.print_d()
