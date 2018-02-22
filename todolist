@@ -51,11 +51,6 @@ _____________________________________________________
 
 
 
-Génération rues
-	Rue rectilignes 
-	abstraites 
-
-
 generation métro : /adele
 	hubs 
 	lignes transversales (de deux points éloignés du centres plutot droites, forcées sur les hubs)
@@ -70,6 +65,13 @@ génération emplois du temps :  /Louis
 	papiers sur les déplacements et emploie du temps à regarder. 
 	génération du profil de personne plus de son emploie du temps
 		interaction entre les personnes ? 
-		
 
-	
+
+___________________________________________________________________________
+
+To do now : 
+
+- liste des hubs 
+- dikjtra 
+- xml sale Louis (Louis)
+- xml propre pour nous deux  (Louis) 
