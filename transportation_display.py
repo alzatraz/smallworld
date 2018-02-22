@@ -12,10 +12,10 @@ def display_segments(lines, intersections, title):
         ax.plot(xs, ys)
     if intersections:
         for inter in intersections:
-            x, y = inter[0][0], inter[0][1]
+            x, y = inter.coords[0], inter.coords[1]
             ax.scatter(x, y, marker='x')
     plt.title(title)
-    plt.savefig(title+".png")
+    plt.savefig('images/adele/'+title+".png")
 
 
 def display_network(bended_lines, intersections, stations, hubs, fast_lines, title):
@@ -32,12 +32,12 @@ def display_network(bended_lines, intersections, stations, hubs, fast_lines, tit
             ys.extend([p1[1], p2[1]])
         ax.plot(xs, ys, c=color)
     for inter in intersections:
-        main_line = inter[1][0]
-        x, y = inter[0][0], inter[0][1]
+        main_line = inter.compats[0][0]
+        x, y = inter.coords[0], inter.coords[1]
         ax.scatter(x, y, marker='x', c=colors[main_line])
     for station in stations:
-        point = station[0]
-        line_id = station[1][0][0]
+        point = station.coords
+        line_id = station.compats[0][0]
         ax.scatter(point[0], point[1], color=colors[line_id], s=10)
     for hub in hubs:
         point = hub[0]
@@ -49,5 +49,5 @@ def display_network(bended_lines, intersections, stations, hubs, fast_lines, tit
         ys = [hub[0][1] for hub in fast_line]
         ax.plot(xs, ys, color=colors[j])
     plt.title(title)
-    plt.savefig(title+".png")
+    plt.savefig('images/adele/'+title+".png")
 

@@ -10,6 +10,36 @@ from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from string import ascii_uppercase
 
+
+class Station(object):
+    def __init__(self, coords, name=None, compats=None, schedule=None):
+        self.name = name
+        self.coords = coords
+        self.compats = compats
+        self.schedule = schedule
+
+    def set_name(new_name):
+        self.name = new_name
+
+    def set_coords(new_coords):
+        self.coords = new_coords
+
+    def add_compat(new_compat):
+        self.compats.append(compat)
+
+    def remove_compat(compat):
+        self.compats.remove(compat)
+
+    def set_schedule(new_schedule):
+        self.schedule = new_schedule
+
+    def display(self):
+        print('Station ' + self.name)
+        print('Coordinates : ', self.coords)
+        for compat in self.compats:
+            print('Station number ' + str(compat[1]) + ' on line ' + str(compat[0]))
+        print('\n')
+
 ####################
 # Helper functions #
 ####################
@@ -66,7 +96,6 @@ def generate_lines(n_lines, mu, sigma):
         lines.append(line)
     return lines
 
-
 def find_intersections(lines):
     """
     Finds intersections between lines.
@@ -84,7 +113,9 @@ def find_intersections(lines):
             if inter:
                 point = inter[0]
                 x, y = point[0], point[1]
-                intersections.append((Point(int(x), int(y)), [i, j]))
+                coords = Point(int(x), int(y))
+                compats = [(i, None), (j, None)]
+                intersections.append(Station(coords, "", compats))
     return intersections
 
 
@@ -96,11 +127,12 @@ def glue_inter(outliers, clusters, stations):
         # either a list of tuples (line_id, number), or a list [line_id]
         points = []
         for station_id in station_ids:
-            lines_crossing.extend(stations[station_id][1])
-            points.append(stations[station_id][0])
+            lines_crossing.extend(stations[station_id].compats)
+            points.append(stations[station_id].coords)
         lines_crossing = list(set(lines_crossing))
         center = np.mean(points, axis=0)
-        centers.append((Point(int(center[0]), int(center[1])), lines_crossing))
+        coords = Point(int(center[0]), int(center[1]))
+        centers.append(Station(coords, "", lines_crossing))
     for outlier in outliers:
         centers.append(stations[outlier])
     return (centers)
@@ -130,7 +162,6 @@ def bend_line(line, where_to_bend):
     bended_line.append(Segment(p1, target))
     return bended_line
 
-
 def merge_lines(lines, glued_inter):
     """
     Takes :
@@ -149,8 +180,8 @@ def merge_lines(lines, glued_inter):
     where_to_bend = defaultdict(list)
     bended_lines = []
     for inter in glued_inter:
-        point = inter[0]  # Point of the intersection
-        crossing_lines = inter[1]  # List of the lines' ids
+        point = inter.coords  # Point of the intersection
+        crossing_lines, _ = zip(*inter.compats)  # List of the lines' ids
         for crossing_line in crossing_lines:
             where_to_bend[crossing_line].append(point)
     for line_id in where_to_bend.keys():
@@ -165,6 +196,7 @@ def merge_lines(lines, glued_inter):
 ##############################
 # Generation of the stations #
 ##############################
+
 
 def generate_stations(bended_lines, variance, av_dist_btw_stations):
     """
@@ -183,7 +215,8 @@ def generate_stations(bended_lines, variance, av_dist_btw_stations):
                 approx_x1 = np.random.normal(x1, variance)
                 approx_y1 = np.random.normal(y1, variance)
                 approx_source = Point(int(approx_x1), int(approx_y1))
-                stations.append([approx_source, [(j, station_number)]])
+                compats = [(j, station_number)]
+                stations.append(Station(approx_source, "", compats))
             seg_length = source.distance(target)
             n_stations = math.floor(seg_length/av_dist_btw_stations)
             # we compute the number of stations on the segment (given that the
@@ -195,10 +228,16 @@ def generate_stations(bended_lines, variance, av_dist_btw_stations):
                 x = i*dist_between_stations*(x2-x1)/seg_length+x1
                 x = np.random.normal(x, variance)
                 y = np.random.normal(y, variance)
-                stations.append([Point(int(x), int(y)), [(j, station_number)]])
+                coords = Point(int(x), int(y))
+                compats = [(j, station_number)]
+                stations.append(Station(coords, "", compats))
             station_number += 1
-            stations.append([Point(int(x2), int(y2)), [(j, station_number)]])
+            coords = Point(int(x2), int(y2))
+            compats = [(j, station_number)]
+            stations.append(Station(coords, "", compats))
     return stations
+
+
 
 
 def points_to_glue(stations, sensitivity):
@@ -207,7 +246,7 @@ def points_to_glue(stations, sensitivity):
     according to a sensitivity parameter (distance under which two points will
     be "glued").
     """
-    coords = [[int(station[0][0]), int(station[0][1])] for station in stations]
+    coords = [[int(station.coords[0]), int(station.coords[1])] for station in stations]
     # coords is a list of lists, each sublist containing the coordinates of a
     # station
 
@@ -229,6 +268,7 @@ def points_to_glue(stations, sensitivity):
     return outliers, clusters
 
 
+
 def glue_stations(outliers, clusters, stations):
     centers = []
     for station_ids in clusters.values():
@@ -237,38 +277,20 @@ def glue_stations(outliers, clusters, stations):
         # either a list of tuples (line_id, number), or a list [line_id]
         points = []
         for station_id in station_ids:
-            lines_crossing.extend(stations[station_id][1])
-            points.append(stations[station_id][0])
+            lines_crossing.extend(stations[station_id].compats)
+            points.append(stations[station_id].coords)
         center = np.mean(points, axis=0)
-        centers.append([Point(int(center[0]), int(center[1])), lines_crossing])
+        coords = Point(int(center[0]), int(center[1]))
+        centers.append(Station(coords, "", lines_crossing))
     for outlier in outliers:
         centers.append(stations[outlier])
     return (centers)
-"""
-        if len(lines_unique_ids) < len(lines_ids):
-            ids_to_del = []
-            print("there are duplicates!!")
-            lines_ids = np.array(lines_ids)
-            for line_unique_id in lines_unique_ids:
-                # we check if there was two or more points from the same line that have been glued
-                indices = np.where(lines_ids == line_unique_id)[0]
-                indices = list(indices)
-                indices = sorted(indices, reverse=True)
-                if len(indices) > 1:
-                    ids_to_del.extend(sorted(indices)[1:])
-                    print("indices where duplicates :", indices)
-            ids_to_del = (sorted(ids_to_del, reverse=True))
-            print("all indices to delete", ids_to_del)
-            for id_to_del in ids_to_del:
-                del lines_crossing[id_to_del]
-            print("new lines_crossing", lines_crossing)
 
-"""
+
         
-
 def remove_duplicate_lines(stations):
     for station in stations:
-        lines_crossing = station[1]
+        lines_crossing = station.compats
         # list of tuples (line_id, number)
 
         lines_ids, numbers = zip(*lines_crossing)
@@ -289,8 +311,12 @@ def remove_duplicate_lines(stations):
                     ids_to_del.extend(sorted(indices)[1:])
             ids_to_del = (sorted(ids_to_del, reverse=True))
             for id_to_del in ids_to_del:
-                del station[1][id_to_del]
+                del station.compats[id_to_del]
     return stations
+
+
+
+
 
 def merge_stations(stations, glued_inter):
     """
@@ -303,14 +329,13 @@ def merge_stations(stations, glued_inter):
     that we obtain stations of the form :
     (Point(x, y), [(line_id, point_number), (line_id, point_number), ...])
     """
-    stations_points = np.array([station[0] for station in stations])
+    stations_points = np.array([station.coords for station in stations])
     # list of the stations' coordinates
-    inter_points = [inter[0] for inter in glued_inter]
+    inter_points = [inter.coords for inter in glued_inter]
     # list of the intersections' coordinates (some of them are expected
     # to match the stations' coordinates)
     ids_to_del = []
     k = 0
-    initi = len(stations)
     for inter_point in inter_points:
         # we go through the intersection points ...
         crossing_lines = []
@@ -323,14 +348,18 @@ def merge_stations(stations, glued_inter):
             # 2 or more stations share an intersection point : we have to merge
             # them
             for station_id in station_ids:
-                crossing_lines.append(stations[station_id][1][0][0])
-                numbers.append(stations[station_id][1][0][1])
+                crossing_lines.append(stations[station_id].compats[0][0])
+                numbers.append(stations[station_id].compats[0][1])
                 ids_to_del.append(station_id)
-            stations.append([inter_point, list(zip(crossing_lines, numbers))])
+            compats = list(zip(crossing_lines, numbers))
+            stations.append(Station(inter_point, "", compats))
     ids_to_del = sorted(ids_to_del, reverse=True)
     for station_id in ids_to_del:
         del stations[station_id]
     return stations
+
+
+
 
 
 ################################################
@@ -344,19 +373,19 @@ def compute_hubs(stations):
     Returns
         - a list( (Point, int, list((int, int)) ) ), hubs (the hubs)
     
-    
     """
     lines_per_station = defaultdict(list)
     # dictionary mapping stations (Points) to the numberof lines that cross it
     point_to_id = {}
     for i, station in enumerate(stations):
-        lines_per_station[station[0]] = len(station[1])
-        point_to_id[station[0]] = i
+        lines_per_station[station.coords] = len(station.compats)
+        point_to_id[station.coords] = i
     n_stations = len(stations)
     n_hubs = int(0.1*n_stations)
     points = sorted(lines_per_station, key=lines_per_station.get, reverse=True)
     points = points[:n_hubs]
-    return [(point, lines_per_station[point], (stations[point_to_id[point]])[1]) for point in points]
+    return [(point, lines_per_station[point], (stations[point_to_id[point]]).compats) for point in points]
+
 
 
 def bend_lines(lines, hubs, n_meters):
@@ -408,11 +437,11 @@ def update_compatibilities(stations, fast_lines):
 
     # no point duplicates, but maybe a point as several times thesame line in its compat
     fast_lines_names = list(ascii_uppercase) 
-    stations_points = [station[0] for station in stations]
+    stations_points = [station.coords for station in stations]
     for j, fast_line in enumerate(fast_lines):
         for k, hub in enumerate(fast_line):
             i = stations_points.index(hub[0])
-            stations[i][1].append((fast_lines_names[j], k))
+            stations[i].compats.append((fast_lines_names[j], k))
     return stations
 
 

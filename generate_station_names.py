@@ -197,9 +197,8 @@ def generate_names(n_stations):
 
 def add_names(names, stations):
     for i, name in enumerate(names):
-        stations[i].append(name)
-    stations_points = [station[0] for station in stations]
-
+        stations[i].name = name
+    stations_points = [station.coords for station in stations]
     return stations
 
 

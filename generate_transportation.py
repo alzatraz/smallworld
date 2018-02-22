@@ -15,6 +15,7 @@ if __name__ == "__main__":
     n_lines_sigma = cfg.n_lines_sigma
     r_line_mu = cfg.r_line_mu
     r_line_sigma = cfg.r_line_sigma
+    intersection_sensitivity = cfg.intersection_sensitivity
     min_n_stations_per_fast_line = cfg.min_n_stations_per_fast_line
     n_meters = cfg.n_meters
     av_dist_btw_stations = cfg.av_dist_btw_stations
@@ -26,42 +27,57 @@ if __name__ == "__main__":
     print (n_lines, "lines will be generated")
 
     lines = geo.generate_lines(n_lines, r_line_mu, r_line_sigma)
+    # lines is a list of Segments
 
-    #dis.display_segments(lines=lines, intersections=[], title='simple segments')
+    dis.display_segments(lines=lines, intersections=[], title='simple segments')
 
     intersections = geo.find_intersections(lines)
-    #dis.display_segments(lines, intersections, 'simple segments with intersections')
 
+    # intersections is a list, each intersection being a tuple composed of a
+    # point and a list of lines that cross it
 
+    dis.display_segments(lines, intersections, 'simple segments with intersections')
 
-    intersection_sensitivity = cfg.intersection_sensitivity
 
     outliers, clusters = geo.points_to_glue(intersections,
                                             intersection_sensitivity)
+    # outliers is a list of Point ids that will remain unchanged
+    # clusters is a dict whose values are the lists of intersections to glue
 
     glued_inter = geo.glue_inter(outliers, clusters, intersections)
-    #dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
+    # glued_inter is a list of tuples composed of a Point and its compatibilities
+    for glued_int in glued_inter:
+        glued_int.display()
+    dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
 
     merged_lines = geo.merge_lines(lines, glued_inter)
-    #dis.display_network(merged_lines, glued_inter, [],[], [], 'lines crossing the intersections')
+    # merged_lines is a list of lists of Segments
 
+    dis.display_network(merged_lines, glued_inter, [],[], [], 'lines crossing the intersections')
+
+
+
+    # Stations generation
     position_variance = cfg.position_variance
     stations = geo.generate_stations(merged_lines, position_variance,
                                      av_dist_btw_stations)
 
+
     stations = geo.merge_stations(stations, glued_inter)
-    #dis.display_network(merged_lines, glued_inter, stations, [], [],  'lines with stations')
+    dis.display_network(merged_lines, glued_inter, stations, [], [],  'lines with stations')
 
     close_stations_sensitivity = cfg.close_stations_sensitivity
     outliers, clusters = geo.points_to_glue(stations,
                                             close_stations_sensitivity)
 
     glued_stations = geo.glue_stations(outliers, clusters, stations)
-    #dis.display_network(merged_lines, [], glued_stations, [], [],  'lines with "glued" stations')
+    dis.display_network(merged_lines, [], glued_stations, [], [],  'lines with "glued" stations')
     filtered_stations = geo.remove_duplicate_lines(glued_stations)
     
     hubs = geo.compute_hubs(filtered_stations)
-    #dis.display_network(merged_lines, [], glued_stations, hubs, [], 'lines with "glued" stations and hubs')
+    # hubs is a list, each hub a triple composed of a Point, a rank, and a list of compatibilities
+
+    dis.display_network(merged_lines, [], glued_stations, hubs, [], 'lines with "glued" stations and hubs')
 
     fast_lines = geo.build_fast_lines(hubs, r_line_mu, r_line_sigma,
                                       min_n_stations_per_fast_line, n_meters)
@@ -70,7 +86,7 @@ if __name__ == "__main__":
     print(n_fast_lines, "fast lines have been generated")
 
 
-    #dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
+    dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
 
     updated_stations = geo.update_compatibilities(filtered_stations,
                                                   fast_lines)
