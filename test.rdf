@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:ns1="http://schema.org/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:nodeID="N91300705ddfe4a389bcc2aa3c897ee82">
+    <ns1:subEvent rdf:nodeID="N91300705ddfe4a389bcc2aa3c897ee82"/>
+    <ns1:startDate>07:09:54</ns1:startDate>
+    <ns1:startDate>07:04:08</ns1:startDate>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N0cbae9510f224f81b1881da9c246d888">
+    <ns1:subEvent rdf:nodeID="N0cbae9510f224f81b1881da9c246d888"/>
+    <ns1:startDate>02:30:01</ns1:startDate>
+    <ns1:startDate>10:15:04</ns1:startDate>
+    <ns1:startDate>03:14:20</ns1:startDate>
+    <ns1:startDate>11:15:41</ns1:startDate>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://smallworld.org/stations/Pont-Neuf/">
+    <ns1:geo rdf:nodeID="N0fb986f4d2b04eb7bb68e7d907dbd2cb"/>
+    <ns1:name>Pont-Neuf</ns1:name>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://smallworld.org//lines/M0/">
+    <ns1:event rdf:nodeID="N9eaa51bc9c8741ffb1f7f734d61184e4"/>
+    <ns1:name>Métro Ligne 0</ns1:name>
+    <ns1:event rdf:nodeID="N91300705ddfe4a389bcc2aa3c897ee82"/>
+    <ns1:containsPlace rdf:resource="http://smallworld.org/stations/Pont-Neuf/"/>
+    <ns1:event rdf:nodeID="N0cbae9510f224f81b1881da9c246d888"/>
+    <ns1:containsPlace rdf:resource="http://smallworld.org/stations/Châtelet/"/>
+    <ns1:event rdf:nodeID="Nc5c1b6baa97b4f8db257aa7322b21971"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N9eaa51bc9c8741ffb1f7f734d61184e4">
+    <ns1:startDate>01:02:74</ns1:startDate>
+    <ns1:startDate>04:15:04</ns1:startDate>
+    <ns1:startDate>15:04:08</ns1:startDate>
+    <ns1:subEvent rdf:nodeID="N0cbae9510f224f81b1881da9c246d888"/>
+    <ns1:startDate>01:05:04</ns1:startDate>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N0fb986f4d2b04eb7bb68e7d907dbd2cb">
+    <ns1:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:latitude>
+    <ns1:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ns1:longitude>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nc5c1b6baa97b4f8db257aa7322b21971">
+    <ns1:startDate>04:54:21</ns1:startDate>
+    <ns1:subEvent rdf:nodeID="N91300705ddfe4a389bcc2aa3c897ee82"/>
+    <ns1:startDate>04:74:05</ns1:startDate>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://smallworld.org/stations/Châtelet/">
+    <ns1:name>Châtelet</ns1:name>
+    <ns1:geo rdf:nodeID="N91825c357c24458caa3d68024c691af6"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N91825c357c24458caa3d68024c691af6">
+    <ns1:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:longitude>
+    <ns1:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</ns1:latitude>
+  </rdf:Description>
+</rdf:RDF>

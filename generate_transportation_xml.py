@@ -1,3 +1,6 @@
+from rdflib import *
+
+
 def write_preamble(file, tab):
     file.write('<?xml version="1.0"?>\n')
 
@@ -84,6 +87,50 @@ def generate_xml(lines_dict):
     file.write('</rdf:RDF>')
     file.close() 
 
+
+
+def generate_rdf(lines_dict):
+    g = Graph()
+    schema = Namespace('http://schema.org/')
+    smallworld = 'http://smallworld.org/'
+    for i, stations in lines_dict.items():
+        if type(i) == int:
+            line_name = 'Métro Ligne ' + str(i)
+            line_path = 'M' + str(i)
+        else:
+            line_name = 'RER Ligne ' + i
+            line_path = 'RER' + i
+        line_path = smallworld + 'lines/' + line_path + '/'
+        line = URIRef(line_path)
+        g.add((line, schema.name, Literal(line_name)))
+        print(stations)
+        for j, station in enumerate(stations):
+            point, number, name, schedule_forward, schedule_backward = station
+            coords = BNode()
+            g.add((coords, schema.latitude, Literal(point[0])))
+            g.add((coords, schema.longitude, Literal(point[1])))
+            station = URIRef(smallworld + 'stations/' + name + '/')
+            g.add((station, schema.geo, coords))
+            g.add((line, schema.containsPlace, station))
+            g.add((station, schema.name, Literal(name)))
+            # g.add((line,)) order
+            departure_forward, departure_backward = BNode(), BNode()
+            g.add((line, schema.event, departure_forward))
+            g.add((line, schema.event, departure_backward))
+            for time_tuple in schedule_forward:
+                g.add((departure_forward, schema.subEvent, departure_forward))
+                time = time_tuple_to_string(time_tuple)
+                g.add((departure_forward, schema.startDate, Literal(time)))
+            for time_tuple in schedule_backward:
+                g.add((departure_backward, schema.subEvent, departure_forward))
+                time = time_tuple_to_string(time_tuple)
+                g.add((departure_backward, schema.startDate, Literal(time)))
+    return g
+
+
+
 if __name__ == "__main__":
-    lines_dict = {0 : [[(0, 0), 5, 'Châtelet', [(2, 30, 1), (3, 14, 20), (10, 15, 4)], [(1, 5, 4), (1, 2, 74)]], [(0, 1), 4, 'Pont-Neuf', [(7,4, 8), (7, 9, 54)], [(4, 74, 5), (4, 54, 21)]]]}
-    generate_xml(lines_dict)
+    lines_dict = {0 : [[(0, 0), 5, 'Châtelet', [(2, 30, 1), (3, 14, 20), (10, 15, 4), (11, 15, 41)], [(1, 5, 4), (1, 2, 74), (15, 4, 8), (4, 15, 4)]], [(0, 1), 4, 'Pont-Neuf', [(7,4, 8), (7, 9, 54)], [(4, 74, 5), (4, 54, 21)]]]}
+    g = generate_rdf(lines_dict)
+    print(g.serialize())
+    g.serialize("test.rdf")

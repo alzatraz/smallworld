@@ -6,6 +6,9 @@ import generate_transportation_xml as xml
 
 
 if __name__ == "__main__":
+
+	# Preprocessing
+
     n_lines = geo.gaussian_trunc(5, 17, 10, 3)
     print (n_lines, "lines will be generated")
     lines = geo.generate_lines(n_lines, 5000, 1000)
@@ -46,7 +49,9 @@ if __name__ == "__main__":
     updated_stations = nm.add_names(names, updated_stations)
     lines_dict = sch.build_lines_dict(updated_stations)
     lines_dict = sch.remove_gaps_in_ordering(lines_dict)
-    lines_dict = sch.compute_whole_schedule(lines_dict, 'friday')
+
+    # Schedulecomputation for each day
+    lines_dict = sch.compute_day_schedule(lines_dict, 'friday')
 
     xml.generate_xml(lines_dict)
 

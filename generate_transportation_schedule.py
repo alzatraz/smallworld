@@ -240,7 +240,7 @@ def compute_line_schedule(line, times_between, day):
     return schedule_forward, schedule_backward
 
 
-def compute_whole_schedule(lines_dict, day):
+def compute_day_schedule(lines_dict, day):
     for line_id in lines_dict.keys():
         line = lines_dict[line_id]
         if type(line_id) == int:
