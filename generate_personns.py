@@ -4,8 +4,7 @@ import math
 import pylab as pl
 from matplotlib import collections  as mc
 from matplotlib.patches import Circle, Wedge, Polygon
-
-
+import time
  
 
 
@@ -18,10 +17,10 @@ color_activity = (0, 1, 0, 1)
 color_home = (0, 0, 1, 1)
 
 ########## play with that###########
-nb_of_days = 1
-p_outing_work = 1
-p_outing_not_work = 1
-size_pop = 35
+nb_of_days = 5
+p_outing_work = .8
+p_outing_not_work = .8
+size_pop = 220000
 
 r_center_paris = 3000
 max_r = 10000
@@ -318,19 +317,19 @@ def display_activities(cinemas, grosseries, sports):
 	for (x,y) in cinemas:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'ko')
+	pl.plot(l_x, l_y, 'ko',ms = 1.5)
 	l_x = []
 	l_y = []
 	for (x,y) in grosseries:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'yo')
+	pl.plot(l_x, l_y, 'yo',ms = 1.5)
 	l_x = []
 	l_y = []
 	for (x,y) in sports:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'mo')
+	pl.plot(l_x, l_y, 'mo', ms = 1.5)
 
 
 
@@ -357,26 +356,30 @@ def display_travels(list_p, day):
 ######################## lets do tests #######################
 
 
-l_p = []
-for i in range(size_pop):
-	if 100*i%(size_pop)==0:
-		print(100*i/(size_pop))
-	person_student = generate_student()
-	person_wc = generate_white_collar()
-	l_p.append(person_student)
-	l_p.append(person_wc)
+if __name__ == "__main__":
+	start_time = time.time()
+	l_p = []
+	for i in range(size_pop):
+		if 100*i%(size_pop)==0:
+			print(100*i/(size_pop))
+		person_student = generate_student()
+		person_wc = generate_white_collar()
+		l_p.append(person_student)
+		l_p.append(person_wc)
 
+	print("--- %s seconds ---" % (time.time() - start_time))	
+	'''
+	display_travels(l_p, 0)
+	display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
+	pl.show()
 
-display_travels(l_p, 0)
-#display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
-pl.show()
+	print("\n student ")
 
-print("\n student ")
+	for d in person_student.travels:
+		d.print_d()
 
-for d in person_student.travels:
-	d.print_d()
+	print("\n white collar travels : ")
 
-print("\n white collar travels : ")
-
-for d in person_wc.travels:
-	d.print_d()
+	for d in person_wc.travels:
+		d.print_d()
+	'''

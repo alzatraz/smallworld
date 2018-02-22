@@ -3,7 +3,7 @@ import generate_station_names as nm
 import generate_transportation_geometry as geo
 import transportation_display as dis
 import generate_transportation_xml as xml
-
+import generate_personns as gp
 
 if __name__ == "__main__":
     n_lines = geo.gaussian_trunc(5, 17, 10, 3)
@@ -49,6 +49,4 @@ if __name__ == "__main__":
     lines_dict = sch.compute_whole_schedule(lines_dict, 'friday')
 
     xml.generate_xml(lines_dict)
-
-
-
+    
