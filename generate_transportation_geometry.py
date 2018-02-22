@@ -14,6 +14,7 @@ from string import ascii_uppercase
 # Helper functions #
 ####################
 
+
 def gaussian_trunc(mini, maxi, mu, sigma):
     """
     Takes :
@@ -165,7 +166,7 @@ def merge_lines(lines, glued_inter):
 # Generation of the stations #
 ##############################
 
-def generate_stations(bended_lines, variance):
+def generate_stations(bended_lines, variance, av_dist_btw_stations):
     """
     Creates stations on lines. The output is a list of stations. A station is
     the data of a Point, and a list of tuples containing a line that crosses
@@ -184,7 +185,7 @@ def generate_stations(bended_lines, variance):
                 approx_source = Point(int(approx_x1), int(approx_y1))
                 stations.append([approx_source, [(j, station_number)]])
             seg_length = source.distance(target)
-            n_stations = math.floor(seg_length/710)
+            n_stations = math.floor(seg_length/av_dist_btw_stations)
             # we compute the number of stations on the segment (given that the
             # average distance between 2 stations is 710m in Paris)
             dist_between_stations = seg_length/n_stations
@@ -358,7 +359,7 @@ def compute_hubs(stations):
     return [(point, lines_per_station[point], (stations[point_to_id[point]])[1]) for point in points]
 
 
-def bend_lines(lines, hubs):
+def bend_lines(lines, hubs, n_meters):
     """
     Takes :
         - a list(Segment), lines (some random subway lines)
@@ -382,7 +383,7 @@ def bend_lines(lines, hubs):
             point = (hub[0])
             crossing_lines = hub[2]
             dist = line.distance(point)
-            if dist < sensitivity*500:
+            if dist < sensitivity*n_meters:
                 projection = line.projection(point)
                 where_to_bend[i] = source.distance(projection)
         if where_to_bend:
@@ -391,7 +392,7 @@ def bend_lines(lines, hubs):
     return bended_lines
        
 
-def build_fast_lines(hubs, mu, sigma):
+def build_fast_lines(hubs, mu, sigma, min_n_stations, n_meters):
     fast_lines_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
     n_fast_lines = len(hubs)
     hubs_points = [hub[0] for hub in hubs]
@@ -399,8 +400,8 @@ def build_fast_lines(hubs, mu, sigma):
     for i, point in enumerate(hubs_points):
         point_to_id[point] = i
     lines = generate_lines(n_fast_lines, mu, sigma)
-    fast_lines = bend_lines(lines, hubs)
-    return [fast_line for fast_line in fast_lines if len(fast_line) > 3]
+    fast_lines = bend_lines(lines, hubs, n_meters)
+    return [fast_line for fast_line in fast_lines if len(fast_line) > min_n_stations]
 
 
 def update_compatibilities(stations, fast_lines):
@@ -416,4 +417,4 @@ def update_compatibilities(stations, fast_lines):
 
 
 if __name__ == '__main__':
-    print("hello")
+    print("")
