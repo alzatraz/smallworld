@@ -346,25 +346,6 @@ def compute_whole_schedule(network):
 
 
 
-#################################
-# Graph definition and Dijkstra #
-#################################
-
-
-def convert_Network_to_Graph(network):
-    graph = nx.Graph()
-    stations = network.get_all_stations()
-    for station in stations:
-        graph.add_node(station)
-    for line in network.lines:
-        stations = line.stations
-        n_stations = line.get_n_stations()
-        for i in range(1, n_stations):
-            graph.add_edge(stations[i-1], stations[i])
-    return graph
-
-def shortest_path(graph, departure, arrival):
-    return nx.shortest_path(graph, departure, arrival)
 
 
 

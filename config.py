@@ -47,10 +47,10 @@ close_stations_sensitivity = 200  # number of meters below which two
 # To generate the fast lines #
 ##############################
 
-min_n_stations_per_fast_line = 3  # minimal number of stations to keep a fast
+min_n_stations_per_fast_line = 4  # minimal number of stations to keep a fast
                                   # line that has been generated
 
-n_meters = 500  # coefficient (in meters) that determines the attractivity of
+n_meters = 400  # coefficient (in meters) that determines the attractivity of
 				# a hub when multiplied with its ranking (number of lines that
 				# cross it). Te attractivity is the radius below which a line
 				# crossing the area within this radius will bend to cross the

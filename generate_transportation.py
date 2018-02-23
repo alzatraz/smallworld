@@ -5,6 +5,39 @@ import transportation_display as dis
 import generate_transportation_xml as xml
 import generate_personns as gp
 import config as cfg
+import generate_itinerary as it
+
+def generate_hubs():
+    n_lines_mini = cfg.n_lines_mini
+    n_lines_maxi = cfg.n_lines_maxi
+    n_lines_mu = cfg.n_lines_mu
+    n_lines_sigma = cfg.n_lines_sigma
+    r_line_mu = cfg.r_line_mu
+    r_line_sigma = cfg.r_line_sigma
+    intersection_sensitivity = cfg.intersection_sensitivity
+    av_dist_btw_stations = cfg.av_dist_btw_stations
+    position_variance = cfg.position_variance
+
+    n_lines = geo.gaussian_trunc(n_lines_mini, n_lines_maxi, n_lines_mu,
+                                 n_lines_sigma)
+
+    lines = geo.generate_lines(n_lines, r_line_mu, r_line_sigma)
+    intersections = geo.find_intersections(lines)
+    outliers, clusters = geo.points_to_glue(intersections,
+                                            intersection_sensitivity)
+    glued_inter = geo.glue_inter(outliers, clusters, intersections)
+    merged_lines = geo.merge_lines(lines, glued_inter)
+    stations = geo.generate_stations(merged_lines, position_variance,
+                                     av_dist_btw_stations)
+    stations = geo.merge_stations(stations, glued_inter)
+
+    close_stations_sensitivity = cfg.close_stations_sensitivity
+    outliers, clusters = geo.points_to_glue(stations,
+                                            close_stations_sensitivity)
+    glued_stations = geo.glue_stations(outliers, clusters, stations)
+    filtered_stations = geo.remove_duplicate_lines(glued_stations)
+    hubs = geo.compute_hubs(filtered_stations)
+    return hubs, filtered_stations
 
 if __name__ == "__main__":
 
@@ -110,11 +143,13 @@ if __name__ == "__main__":
     # Schedule computation for each day
     network = sch.compute_whole_schedule(network)
 
+    print('number of stations', len(network.get_all_stations()))
 
-    graph = sch.convert_Network_to_Graph(network)
-    p1 = network.lines[0].stations[0]
-    p2 = network.lines[1].stations[7]
-    path = sch.shortest_path(graph, p1, p2)
+    from sympy.geometry import Point
+    graph = it.convert_Network_to_Graph(network)
+    p1 = Point(3000, -1000)
+    p2 = Point(-3000, 1000)
+    path = it.shortest_path(graph, p1, p2)
 
     print(path)
 
@@ -122,6 +157,6 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     plt.clf()
 
-    for station in path:
-        plt.scatter(station.coords[0], station.coords[1])
-    plt.savefig('test_path.png')
+    
+
+    dis.display_path_on_network(p1, p2, path, network, 'path on a network')

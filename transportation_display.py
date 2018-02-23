@@ -51,3 +51,20 @@ def display_network(bended_lines, intersections, stations, hubs, fast_lines, tit
     plt.title(title)
     plt.savefig('images/adele/'+title+".png")
 
+def display_path_on_network(departure, arrival, path, network, title):
+    lines = network.lines
+    n_lines = network.get_n_lines()
+    colors = [(np.random.uniform(0, 1, 3)) for _ in range(0, n_lines)]
+    for i, line in enumerate(lines):
+        stations = line.stations
+        coords = [station.coords for station in stations]
+        coords = [(coord[0], coord[1]) for coord in coords]
+        xs, ys = zip(*coords)
+        plt.plot(xs, ys, color=colors[i])
+    for station in path:
+        plt.scatter(station.coords[0], station.coords[1], color='black', s=40)
+    plt.plot([departure[0], path[0].coords[0]], [departure[1], path[0].coords[1]], '--', color='black')
+    plt.plot([arrival[0], path[-1].coords[0]], [arrival[1], path[-1].coords[1]], '--', color='black')
+    plt.savefig('images/adele/'+title+'.png')
+
+
