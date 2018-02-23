@@ -39,9 +39,9 @@ def generate_hubs():
     hubs = geo.compute_hubs(filtered_stations)
     return hubs, filtered_stations
 
-if __name__ == "__main__":
+def generate_transportation():
 
-	# Global variables import
+    # Global variables import
     n_lines_mini = cfg.n_lines_mini
     n_lines_maxi = cfg.n_lines_maxi
     n_lines_mu = cfg.n_lines_mu
@@ -54,109 +54,65 @@ if __name__ == "__main__":
     av_dist_btw_stations = cfg.av_dist_btw_stations
     slow_speed = cfg.slow_speed
     fast_speed = cfg.fast_speed
+    close_stations_sensitivity = cfg.close_stations_sensitivity
+    position_variance = cfg.position_variance
 
 
-    
-
-    
-    # Preprocessing
+    # Global topology : lines
     n_lines = geo.gaussian_trunc(n_lines_mini, n_lines_maxi, n_lines_mu,
                                  n_lines_sigma)
-
-    print (n_lines, "lines will be generated")
-
     lines = geo.generate_lines(n_lines, r_line_mu, r_line_sigma)
-    # lines is a list of Segments
-
-    dis.display_segments(lines=lines, intersections=[], title='simple segments')
-
+    dis.display_segments(lines, [], 'simple segments')
     intersections = geo.find_intersections(lines)
-
-    # intersections is a list, each intersection being a tuple composed of a
-    # point and a list of lines that cross it
-
-    dis.display_segments(lines, intersections, 'simple segments with intersections')
-
-
+    dis.display_segments(lines, intersections,
+                         'simple segments with intersections')
     outliers, clusters = geo.points_to_glue(intersections,
                                             intersection_sensitivity)
-    # outliers is a list of Point ids that will remain unchanged
-    # clusters is a dict whose values are the lists of intersections to glue
-
     glued_inter = geo.glue_inter(outliers, clusters, intersections)
-    # glued_inter is a list of tuples composed of a Point and its compatibilities
-    
-
-    dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
-
+    dis.display_segments(lines, glued_inter,
+                         'simple segments with "glued" intersections')
     merged_lines = geo.merge_lines(lines, glued_inter)
-    # merged_lines is a list of lists of Segments
+    dis.display_network(merged_lines, glued_inter, [],[], [],
+                        'lines crossing the intersections')
 
-    dis.display_network(merged_lines, glued_inter, [],[], [], 'lines crossing the intersections')
-
-
-
-    # Stations generation
-    position_variance = cfg.position_variance
+    # Local topology : stations
     stations = geo.generate_stations(merged_lines, position_variance,
                                      av_dist_btw_stations)
-
-
     stations = geo.merge_stations(stations, glued_inter)
-    dis.display_network(merged_lines, glued_inter, stations, [], [],  'lines with stations')
-
-    close_stations_sensitivity = cfg.close_stations_sensitivity
+    dis.display_network(merged_lines, glued_inter, stations, [], [],
+                        'lines with stations')
     outliers, clusters = geo.points_to_glue(stations,
                                             close_stations_sensitivity)
-
     glued_stations = geo.glue_stations(outliers, clusters, stations)
-    dis.display_network(merged_lines, [], glued_stations, [], [],  'lines with "glued" stations')
+    dis.display_network(merged_lines, [], glued_stations, [], [],
+                        'lines with "glued" stations')
     filtered_stations = geo.remove_duplicate_lines(glued_stations)
-    
     hubs = geo.compute_hubs(filtered_stations)
-    # hubs is a list, each hub a triple composed of a Point, a rank, and a list of compatibilities
-
-    dis.display_network(merged_lines, [], glued_stations, hubs, [], 'lines with "glued" stations and hubs')
-
+    dis.display_network(merged_lines, [], glued_stations, hubs, [],
+                        'lines with "glued" stations and hubs')
     fast_lines = geo.build_fast_lines(hubs, r_line_mu, r_line_sigma,
                                       min_n_stations_per_fast_line, n_meters)
-
     n_fast_lines = len(fast_lines)
-    print(n_fast_lines, "fast lines have been generated")
-
-
     dis.display_network([], [], [], hubs, fast_lines, 'fast lines')
-
     updated_stations = geo.update_compatibilities(filtered_stations,
                                                   fast_lines)
 
-    # Adding names
+    # Toponymy
     names = nm.generate_names(len(updated_stations))
     updated_stations = nm.add_names(names, updated_stations)
-
-    
     lines_dict = sch.build_lines_dict(updated_stations)
-
     network = sch.build_Network(lines_dict, slow_speed, fast_speed)
 
-
-    # Schedule computation for each day
+    # Schedule and itineraries
     network = sch.compute_whole_schedule(network)
-
-    print('number of stations', len(network.get_all_stations()))
-
+    stations = network.get_all_stations()
     from sympy.geometry import Point
     graph = it.convert_Network_to_Graph(network)
     p1 = Point(3000, -1000)
     p2 = Point(-3000, 1000)
     path = it.shortest_path(graph, p1, p2)
-
-    print(path)
-
-    
-    import matplotlib.pyplot as plt
-    plt.clf()
-
-    
-
     dis.display_path_on_network(p1, p2, path, network, 'path on a network')
+    return network, stations, graph, hubs
+
+if __name__ == "__main__":
+    network, stations, graph, hubs = generate_transportation()

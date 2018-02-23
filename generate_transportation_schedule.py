@@ -3,6 +3,77 @@ import numpy as np
 import generate_transportation_geometry as geo
 from collections import defaultdict
 
+###########
+# Classes #
+###########
+
+
+class Network(object):
+    def __init__(self, lines=[]):
+        self.lines = lines
+
+    def add_line(self, line):
+        self.lines.append(line)
+
+    def get_line_by_name(self, line_name):
+        lines = self.lines
+        for line in lines:
+            if line.name == line_name:
+                return line
+    def display(self):
+        print('The Network contains ' + str(len(self.lines)) + ' lines')
+        for line in self.lines:
+            line.display()
+            print('\n')
+
+    def get_n_lines(self):
+        return len(self.lines)
+
+    def get_all_stations(self):
+        stations = []
+        for line in self.lines:
+            for station in line.stations:
+                if station not in stations:
+                    stations.append(station)
+        return stations
+
+    def display_schedule(self, line_name, station_number, day_type, direction):
+        line = self.get_line_by_name(line_name)
+        if day_type == 'wd':
+            if direction == 'f':
+                print(line.schedule.wd_forward[station_number-1])
+            else:
+                print(line.schedule.wd_backward[station_number-1])
+        else:
+            if direction == 'f':
+                print(line.schedule.we_forward[station_number-1])
+            else:
+                print(line.schedule.we_backward[station_number-1])
+
+
+class Line(object):
+    def __init__(self, name=None, speed=None, stations=[], schedule=None):
+        self.stations = stations
+        self.name = name
+        self.speed = speed
+        self.schedule = schedule
+
+    def display(self):
+        print('Line ' + str(self.name))
+        print('Speed ' + str(self.speed) + ' m/s')
+        print('Contains ' + str(len(self.stations)) + ' stations :')
+        for station in self.stations:
+            print(station.name)
+
+    def get_n_stations(self):
+        return(len(self.stations))
+
+    def get_station_by_name(self, station_name):
+        for station in self.stations:
+            if station.name == name:
+                return station
+
+
 ####################
 # Helper functions #
 ####################
@@ -58,77 +129,6 @@ def is_less_or_equal(time_tuple1, time_tuple2):
 ##################
 # Data synthesis #
 ##################
-
-
-class Network(object):
-    def __init__(self, lines=[]):
-        self.lines = lines
-
-    def add_line(self, line):
-        self.lines.append(line)
-
-    def get_line_by_name(self, line_name):
-        lines = self.lines
-        for line in lines:
-            if line.name == line_name:
-                return line
-    def display(self):
-        print('The Network contains ' + str(len(self.lines)) + ' lines')
-        for line in self.lines:
-            line.display()
-            print('\n')
-
-    def get_n_lines(self):
-        return len(self.lines)
-
-    def get_all_stations(self):
-        stations = []
-        for line in self.lines:
-            for station in line.stations:
-                if station not in stations:
-                    stations.append(station)
-        return stations
-
-    def display_schedule(self, line_name, station_number, day_type, direction):
-        line = self.get_line_by_name(line_name)
-        if day_type == 'wd':
-            if direction == 'f':
-                print(line.schedule.wd_forward[station_number-1])
-            else:
-                print(line.schedule.wd_backward[station_number-1])
-        else:
-            if direction == 'f':
-                print(line.schedule.we_forward[station_number-1])
-            else:
-                print(line.schedule.we_backward[station_number-1])
-
-
-
-                
-
-
-
-class Line(object):
-    def __init__(self, name=None, speed=None, stations=[], schedule=None):
-        self.stations = stations
-        self.name = name
-        self.speed = speed
-        self.schedule = schedule
-
-    def display(self):
-        print('Line ' + str(self.name))
-        print('Speed ' + str(self.speed) + ' m/s')
-        print('Contains ' + str(len(self.stations)) + ' stations :')
-        for station in self.stations:
-            print(station.name)
-
-    def get_n_stations(self):
-        return(len(self.stations))
-
-    def get_station_by_name(self, station_name):
-        for station in self.stations:
-            if station.name == name:
-                return station
 
 
 def build_lines_dict(stations):
@@ -314,23 +314,6 @@ class Schedule(object):
         self.we_forward = we_forward
         self.we_backward = we_backward
 
-def compute_whole_schedule2(lines_dict):
-    for line_id in lines_dict.keys():
-        line = lines_dict[line_id]
-        if type(line_id) == int:
-            speed = 'slow'
-        else:
-            speed = 'fast'
-        times_between = compute_times_between_stations(line_id, line, speed)
-        schedule_we = compute_line_schedule(times_between, 'Saturday')
-        schedule_wd = compute_line_schedule(times_between, 'Monday')
-        we_forward, we_backward = schedule_we
-        wd_forward, wd_backward = schedule_wd
-        for i, station in enumerate(line):
-            number = station.query_number(line_id)
-            station_schedule = Schedule(wd_forward[number], wd_backward[number], we_forward[number], we_backward[number])
-            lines_dict[line_id][i].schedule = station_schedule
-    return lines_dict
 
 def compute_whole_schedule(network):
     for line in network.lines:

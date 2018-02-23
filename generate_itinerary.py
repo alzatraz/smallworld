@@ -30,5 +30,4 @@ def shortest_path(graph, departure, arrival):
         if dist_arrival < min_dist_arrival:
             min_dist_arrival = dist_arrival
             arrival_station = station
-    print(min_dist_departure, min_dist_arrival)
     return nx.shortest_path(graph, departure_station, arrival_station)

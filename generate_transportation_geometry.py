@@ -11,9 +11,6 @@ from sklearn import metrics
 from string import ascii_uppercase
 
 
-
-
-
 class Station(object):
     def __init__(self, coords, name=None, compats=None):
         self.name = name

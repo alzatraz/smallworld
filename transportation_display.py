@@ -51,6 +51,7 @@ def display_network(bended_lines, intersections, stations, hubs, fast_lines, tit
     plt.title(title)
     plt.savefig('images/adele/'+title+".png")
 
+
 def display_path_on_network(departure, arrival, path, network, title):
     lines = network.lines
     n_lines = network.get_n_lines()
@@ -65,6 +66,7 @@ def display_path_on_network(departure, arrival, path, network, title):
         plt.scatter(station.coords[0], station.coords[1], color='black', s=40)
     plt.plot([departure[0], path[0].coords[0]], [departure[1], path[0].coords[1]], '--', color='black')
     plt.plot([arrival[0], path[-1].coords[0]], [arrival[1], path[-1].coords[1]], '--', color='black')
+    plt.title('Shortest path using the transportation network')
     plt.savefig('images/adele/'+title+'.png')
 
 
