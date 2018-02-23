@@ -19,7 +19,13 @@ if __name__ == "__main__":
     min_n_stations_per_fast_line = cfg.min_n_stations_per_fast_line
     n_meters = cfg.n_meters
     av_dist_btw_stations = cfg.av_dist_btw_stations
+    slow_speed = cfg.slow_speed
+    fast_speed = cfg.fast_speed
 
+
+    
+
+    
     # Preprocessing
     n_lines = geo.gaussian_trunc(n_lines_mini, n_lines_maxi, n_lines_mu,
                                  n_lines_sigma)
@@ -46,8 +52,8 @@ if __name__ == "__main__":
 
     glued_inter = geo.glue_inter(outliers, clusters, intersections)
     # glued_inter is a list of tuples composed of a Point and its compatibilities
-    for glued_int in glued_inter:
-        glued_int.display()
+    
+
     dis.display_segments(lines, glued_inter, 'simple segments with "glued" intersections')
 
     merged_lines = geo.merge_lines(lines, glued_inter)
@@ -91,13 +97,31 @@ if __name__ == "__main__":
     updated_stations = geo.update_compatibilities(filtered_stations,
                                                   fast_lines)
 
+    # Adding names
     names = nm.generate_names(len(updated_stations))
     updated_stations = nm.add_names(names, updated_stations)
+
+    
     lines_dict = sch.build_lines_dict(updated_stations)
-    lines_dict = sch.remove_gaps_in_ordering(lines_dict)
+
+    network = sch.build_Network(lines_dict, slow_speed, fast_speed)
+
 
     # Schedule computation for each day
-    lines_dict = sch.compute_day_schedule(lines_dict, 'friday')
+    network = sch.compute_whole_schedule(network)
 
-    xml.generate_xml(lines_dict)
+
+    graph = sch.convert_Network_to_Graph(network)
+    p1 = network.lines[0].stations[0]
+    p2 = network.lines[1].stations[7]
+    path = sch.shortest_path(graph, p1, p2)
+
+    print(path)
+
     
+    import matplotlib.pyplot as plt
+    plt.clf()
+
+    for station in path:
+        plt.scatter(station.coords[0], station.coords[1])
+    plt.savefig('test_path.png')

@@ -11,27 +11,26 @@ from sklearn import metrics
 from string import ascii_uppercase
 
 
+
+
+
 class Station(object):
-    def __init__(self, coords, name=None, compats=None, schedule=None):
+    def __init__(self, coords, name=None, compats=None):
         self.name = name
         self.coords = coords
         self.compats = compats
-        self.schedule = schedule
 
-    def set_name(new_name):
-        self.name = new_name
+    def query_number(self, line_name):
+        compats = self.compats
+        for compat in compats:
+            if compat[0] == line_name:
+                return compat[1]
 
-    def set_coords(new_coords):
-        self.coords = new_coords
-
-    def add_compat(new_compat):
-        self.compats.append(compat)
-
-    def remove_compat(compat):
-        self.compats.remove(compat)
-
-    def set_schedule(new_schedule):
-        self.schedule = new_schedule
+    def set_number(self, compat, new_number):
+        line_name = compat[0]
+        i = self.compats.index(compat)
+        self.compats[i] = (line_name, new_number)
+        return self
 
     def display(self):
         print('Station ' + self.name)

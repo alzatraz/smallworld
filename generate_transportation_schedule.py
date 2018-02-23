@@ -1,3 +1,4 @@
+import networkx as nx
 import numpy as np
 import generate_transportation_geometry as geo
 from collections import defaultdict
@@ -59,33 +60,104 @@ def is_less_or_equal(time_tuple1, time_tuple2):
 ##################
 
 
+class Network(object):
+    def __init__(self, lines=[]):
+        self.lines = lines
+
+    def add_line(self, line):
+        self.lines.append(line)
+
+    def get_line_by_name(self, line_name):
+        lines = self.lines
+        for line in lines:
+            if line.name == line_name:
+                return line
+    def display(self):
+        print('The Network contains ' + str(len(self.lines)) + ' lines')
+        for line in self.lines:
+            line.display()
+            print('\n')
+
+    def get_n_lines(self):
+        return len(self.lines)
+
+    def get_all_stations(self):
+        stations = []
+        for line in self.lines:
+            for station in line.stations:
+                if station not in stations:
+                    stations.append(station)
+        return stations
+
+    def display_schedule(self, line_name, station_number, day_type, direction):
+        line = self.get_line_by_name(line_name)
+        if day_type == 'wd':
+            if direction == 'f':
+                print(line.schedule.wd_forward[station_number-1])
+            else:
+                print(line.schedule.wd_backward[station_number-1])
+        else:
+            if direction == 'f':
+                print(line.schedule.we_forward[station_number-1])
+            else:
+                print(line.schedule.we_backward[station_number-1])
+
+
+
+                
+
+
+
+class Line(object):
+    def __init__(self, name=None, speed=None, stations=[], schedule=None):
+        self.stations = stations
+        self.name = name
+        self.speed = speed
+        self.schedule = schedule
+
+    def display(self):
+        print('Line ' + str(self.name))
+        print('Speed ' + str(self.speed) + ' m/s')
+        print('Contains ' + str(len(self.stations)) + ' stations :')
+        for station in self.stations:
+            print(station.name)
+
+    def get_n_stations(self):
+        return(len(self.stations))
+
+    def get_station_by_name(self, station_name):
+        for station in self.stations:
+            if station.name == name:
+                return station
+
+
 def build_lines_dict(stations):
     lines_dict = defaultdict(list)
     for station in stations:
-        point = station[0]
-        lines_and_numbers = station[1]
-        name = station[2]
-        lines, numbers = zip(*lines_and_numbers)
-        lines = list(lines)
-        numbers = list(numbers)
-        for line, number in lines_and_numbers:
-            lines_dict[line].append([point, number, name])
-    for line in lines_dict.values():
-        stations = [station[0] for station in line]
-        unique_stations = set(stations)
+        lines_and_numbers = station.compats
+        for line, _ in lines_and_numbers:
+            lines_dict[line].append(station)
     return lines_dict
 
-
-def remove_gaps_in_ordering(lines_dict):
-    for line in lines_dict.values():
-        n_stations = len(line)
-        former_numbers = sorted([station[1] for station in line])
-        new_numbers = range(0, n_stations)
-        former_to_new = dict(zip(former_numbers, new_numbers))
-        for station in line:
-            station[1] = former_to_new[station[1]]
-    return lines_dict
-
+def build_Network(lines_dict, slow_speed, fast_speed):
+    network = Network()
+    for (j, (line_name, stations)) in enumerate(lines_dict.items()):
+        #network.lines.append(Line(line_name))
+        station_to_number = []
+        new_stations = []
+        for station in stations:
+            station_to_number.append((station, station.query_number(line_name)))
+        station_to_number = sorted(station_to_number, key=lambda x: x[1])
+        for (i, (station, number)) in enumerate(station_to_number):
+            new_station = station.set_number((line_name, number), i+1)
+            new_stations.append(new_station)
+        if type(line_name) == int:
+            speed = slow_speed
+        else:
+            speed = fast_speed
+        line = Line(line_name, speed, new_stations)
+        network.add_line(line)
+    return network
 
 
 #######################
@@ -115,19 +187,15 @@ def start_end_terminus(day):
     return start_times, end_times
 
 
-def compute_times_between_stations(line, speed):
+def compute_times_between_stations(line_name, line, speed):
     times_between = []
-    n_stations = len(line)
-    if speed == 'slow':
-        speed = 25000/3600
-    else:
-        speed = 40000/3600
+    n_stations = line.get_n_stations()
     point_to_number = {}
 
     l = []
-    for i, station in enumerate(line):
-        l.append(station[0])
-        point_to_number[station[0]] = station[1]
+    for i, station in enumerate(line.stations):
+        l.append(station.coords)
+        point_to_number[station.coords] = station.query_number(line_name)
     # problème au niveau du dictionnaire !!!
     # la ligne contient plusieurs points identiques !!
     # il faut regarder la fonction 
@@ -179,8 +247,8 @@ def new_time_from_previous(time_between, start):
     return new_time
 
 
-def compute_line_schedule(line, times_between, day):
-    n_stations = len(line)
+def compute_line_schedule(times_between, day):
+    n_stations = len(times_between) + 1
 
     schedule_forward = []
     schedule_backward = []
@@ -239,19 +307,64 @@ def compute_line_schedule(line, times_between, day):
                 schedule_backward[i].append(time_backward)
     return schedule_forward, schedule_backward
 
+class Schedule(object):
+    def __init__(self, wd_forward=None, wd_backward=None, we_forward=None, we_backward=None):
+        self.wd_forward = wd_forward
+        self.wd_backward = wd_backward
+        self.we_forward = we_forward
+        self.we_backward = we_backward
 
-def compute_day_schedule(lines_dict, day):
+def compute_whole_schedule2(lines_dict):
     for line_id in lines_dict.keys():
         line = lines_dict[line_id]
         if type(line_id) == int:
             speed = 'slow'
         else:
             speed = 'fast'
-        times_between = compute_times_between_stations(line, speed)
-        schedule = compute_line_schedule(line, times_between, day)
-        schedule_forward, schedule_backward = schedule
+        times_between = compute_times_between_stations(line_id, line, speed)
+        schedule_we = compute_line_schedule(times_between, 'Saturday')
+        schedule_wd = compute_line_schedule(times_between, 'Monday')
+        we_forward, we_backward = schedule_we
+        wd_forward, wd_backward = schedule_wd
         for i, station in enumerate(line):
-            number = station[1]
-            lines_dict[line_id][i].append(schedule_forward[number])
-            lines_dict[line_id][i].append(schedule_backward[number])
+            number = station.query_number(line_id)
+            station_schedule = Schedule(wd_forward[number], wd_backward[number], we_forward[number], we_backward[number])
+            lines_dict[line_id][i].schedule = station_schedule
     return lines_dict
+
+def compute_whole_schedule(network):
+    for line in network.lines:
+        speed = line.speed
+        line_name = line.name
+        times_between = compute_times_between_stations(line_name, line, speed)
+        schedule_we = compute_line_schedule(times_between, 'saturday')
+        schedule_wd = compute_line_schedule(times_between, 'monday')
+        we_forward, we_backward = schedule_we
+        wd_forward, wd_backward = schedule_wd
+        line.schedule = Schedule(wd_forward, wd_backward, we_forward, we_backward)
+    return network
+
+
+
+#################################
+# Graph definition and Dijkstra #
+#################################
+
+
+def convert_Network_to_Graph(network):
+    graph = nx.Graph()
+    stations = network.get_all_stations()
+    for station in stations:
+        graph.add_node(station)
+    for line in network.lines:
+        stations = line.stations
+        n_stations = line.get_n_stations()
+        for i in range(1, n_stations):
+            graph.add_edge(stations[i-1], stations[i])
+    return graph
+
+def shortest_path(graph, departure, arrival):
+    return nx.shortest_path(graph, departure, arrival)
+
+
+

@@ -39,7 +39,7 @@ position_variance = 200  # standard deviation for the x and y position of a
 # To generate the aggregated stations #
 #######################################
 
-close_stations_sensitivity = 300  # number of meters below which two
+close_stations_sensitivity = 200  # number of meters below which two
                                   # intersections will form a cluster and will
                                   # be glued together
 
@@ -55,4 +55,6 @@ n_meters = 500  # coefficient (in meters) that determines the attractivity of
 				# cross it). Te attractivity is the radius below which a line
 				# crossing the area within this radius will bend to cross the
 				# hub)
+slow_speed = 25000/3600  # speed in meters per seconds for slow lines
+fast_speed = 40000/3600  # speed in meters per seconds for fast lines
 
