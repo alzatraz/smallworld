@@ -1,0 +1,329 @@
+\documentclass[11pt]{beamer}
+\usetheme{Berlin}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algorithm2e}
+\usepackage{stmaryrd}
+\defbeamertemplate*{footline}{shadow theme}
+{%
+  \leavevmode%
+  \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fil,rightskip=.3cm]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertframenumber\,/\,\inserttotalframenumber\hfill\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle%
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\author{Louis Cohen}
+\title{Steiner Tree optimisation}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{}
+%\logo{} 
+\institute{MPRI 2017} 
+\date{February 16, 2018} 
+%\subject{} 
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+\section{Preliminar study}
+
+\subsection{The problem}
+
+\begin{frame}{Steiner Tree Problem}
+\begin{block}{Notation}
+\begin{itemize}
+	\item Graph : $G = (V,E)$
+	\item Weight $w:E\rightarrow \mathbb{R}$
+	\item Terminals : $T \subset V$
+	\item Feasible solution
+	\item Optimal solution
+\end{itemize}
+\end{block}
+$$F_{objectif} = \argmin\limits_{S\subset E / S ~~admissible} ~~ \sum\limits_{e\in S} w(e) $$
+\end{frame}
+
+
+
+\subsection{Deterministic Optimisation}
+
+\begin{frame}{Algorithm}
+\includegraphics[scale=.3]{images/algo_determin}
+\end{frame}
+
+\begin{frame}{Example}
+
+\includegraphics<1>[scale=.27]{images/borne1}
+
+
+\includegraphics<2>[scale=.27]{images/borne2}
+
+
+\end{frame}
+	
+
+
+\begin{frame}{Theoritical results}
+
+\begin{block}{Theoritical}
+
+\begin{itemize}
+	\item Feasible solution
+	\item $2-approximation$
+\end{itemize}
+
+\end{block}
+
+\begin{exampleblock}{Practical}
+
+\begin{itemize}
+	\item Proximity to the result ($\geq 90\%$)
+	\item On some instance hard to improve  ($\geq 300$ operations)
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+
+
+
+\section{Solutions' neighbors}
+
+\subsection{General approach}
+\begin{frame}{First approach}
+\begin{itemize}
+	\item<1->[] Solution $S$\\
+	\item<1->[] Deleting and adding edges\\
+	\item<2->[]$\Rightarrow$ Not enough\\
+	\item<3->[]$\Rightarrow$ New operations\\
+
+\end{itemize}	
+\end{frame}
+
+\begin{frame}{New operations}
+
+\begin{itemize}   
+\item \textbf{Edges adding}
+\item \textbf{Edge deleting}  
+\item \textbf{Adding a path}
+\item  \textbf{Clear}
+\end{itemize}
+
+\end{frame}
+
+\subsection{Different versions}
+\begin{frame}{One step search}
+Returning a random neighbor using the operations\\
+But how do we use the operations ? ....\\
+3 versions
+\end{frame}
+
+\begin{frame}
+
+\begin{alertblock}{First version}
+Random use of the 3 first operations\\
+k time (about 10) \\
+Clean\\
+\textbf{Problem : } deleting operation really slow
+\end{alertblock}
+\pause
+
+\only<2>{
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+time  & edge add & path add & edge del & nodes & edges & terminals\\ 
+\hline 
+I 001 & 0,03 & 0,01 & 6,63 & 320 & 640 & 80 \\ 
+\hline 
+I 039 & 0,07 & 0,01 & 58,34 & 6405 & 10454 & 16 \\ 
+\hline 
+I 19 & 0,32 & 1,70 & 1052 & 38307 & 71546 & 58 \\
+\hline 
+I 143 & 0,17 & 0,03 & 423,4 & 2676 & 3894 & 1000 \\ 
+\hline 
+\end{tabular} 
+}
+\pause
+\begin{block}{Second version}
+Random use of the 2 first operations\\
+k time (about 7) \\
+Clean
+\end{block}
+\pause
+\begin{block}{Third version}
+Twice\{Random use of the 2 first operations + Deletion\} \\
+Clean
+\end{block}
+\end{frame}
+
+
+\section{Local searchs}
+
+\subsection{Algorithms}
+
+\begin{frame}{One step search}
+\begin{itemize}
+	\item No error
+	\item Constant probability of accepting errors
+	\item Simulated annealing
+\end{itemize}
+\end{frame}
+
+\begin{frame}{No error}
+
+\includegraphics[scale=.3]{images/without_error_1000_v2}
+
+\end{frame}
+
+\begin{frame}{Constant probability error}
+
+\includegraphics[scale=.3]{images/with_error_005_1000}
+
+\end{frame}
+
+
+\begin{frame}{simulated annealing}
+Proba of accepting : $e^{\frac{\Delta}{T}}$ (T heat)\\
+Heat strategy choice : \\
+\begin{itemize}
+	\item Harmonic 
+	\item Linear
+\end{itemize}
+\end{frame}
+
+\subsection{Results}
+
+\begin{frame}{Comparison}
+
+No error $>$ Constant probability error\\
+Simulated annealing $>$ No error \\
+\textbf{But : } No way of automaticly paramater $T$ 
+
+\end{frame}
+
+
+\section{Molecular algorithm}
+
+\subsection{Principe}
+
+\begin{frame}
+
+
+
+
+\begin{minipage}[t]{0.48\linewidth}
+Starting population\\
+\textbf{Each generation}
+\begin{itemize}
+\item<2-> Mutation
+\item<3-> Crossover
+\item<4-> Selection
+\end{itemize}
+\end{minipage}\hfill
+
+\begin{minipage}[t]{0.48\linewidth}
+\includegraphics<1>[scale=.2]{images/genetic1}
+\includegraphics<2>[scale=.2]{images/genetic3}
+\includegraphics<3>[scale=.2]{images/genetic2}
+\includegraphics<4>[scale=.2]{images/genetic4}
+\end{minipage}
+\end{frame}
+
+\subsection{The different plugins}
+
+\begin{frame}{Selection}
+\begin{itemize}
+	\item classic : best of each gen
+	\item fitness proportionnal : keeping probability $\frac{value(S)}{\sum\limits_{i} value(S_i)}$
+	\item Boltzmann : Boltzmann probability
+	\item Threshold : keep $\leq min + threshold$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Crossover and mutation}
+\begin{block}{Crossover}
+$J = Join(S_1, S_2)$\\
+$J = (V_1\cup V_2,E_1\cup E_2)$\\
+$S = clean(J)$
+\end{block}
+
+\begin{block}{mutation}
+Different neighbor choices
+\end{block}
+\end{frame}
+
+\subsection{Results}
+\begin{frame}{Addition comparison}
+\begin{figure}
+\centering
+\includegraphics[scale=.3]{images/comparaison_genetic_ajout.pdf}
+\caption{green crossover, ref mutation, blue both}
+\label{compareajout}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Selection comparison}
+\begin{figure}
+\centering
+\includegraphics[scale=.3]{images/comparaison_genetic_selection.pdf}
+\caption{green classic, red sources, blue Boltzmann, black threshold}
+\label{compareselection}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Crossovers}
+
+\begin{alertblock}{The real question}
+\begin{itemize}
+\item<1-> Is crossover interesting ? 
+\item<2-> Could just be multi thread local searchs ? 
+\item<3-> Big question $\Rightarrow$ big answer...
+\end{itemize}
+\end{alertblock}
+
+
+\onslide<4->{
+\begin{block}{Crossover Count}
+Number of crossover : $C(S)$\\
+If S frome $S_1,S_2$ : $C(S) =C(S_1)+ C(S_2)$
+\end{block}
+}
+
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+\centering
+\includegraphics[scale=.55]{images/nombre_fusion_log_30_1000.pdf}
+\caption{$\log(C(S))$, generation size = 30}
+\end{figure}
+
+\end{frame}
+
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+Modular code\\
+For now genetic is the most efficient\\
+Easy to improve\\
+\centering
+\includegraphics[scale=.3]{images/comparaison_genetic_without_error}
+\end{frame}
+
+\end{document}
+

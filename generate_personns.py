@@ -9,7 +9,6 @@ import xml.etree as etree
 from xml.etree import ElementTree
 import xml.etree.cElementTree as ET
 import xml.dom.minidom
-
  
 
 
@@ -20,6 +19,12 @@ pi = 3.14159265359
 color_work = (1, 0, 0, 1)
 color_activity = (0, 1, 0, 1)
 color_home = (0, 0, 1, 1)
+
+
+stations = []
+shortest_path_stations = {}
+closest_station = {}
+
 
 ########## play with that###########
 nb_of_days = 7
@@ -72,6 +77,15 @@ def choose_place(possible_places, origin):
 
 ######################### main classes #######################
 
+def closest_station_of(pos):
+	if pos in closest_station.keys():
+		return(closest_station[pos])
+	else:
+		s = choose_place(stations, pos)
+		closest_station[pos] =s
+		return(s)
+
+
 class Deplacement:
 	def __init__(self):
 		self.start = (0,0)
@@ -79,6 +93,7 @@ class Deplacement:
 		self.day = 0
 		self.hour = 0
 		self.tag = "none"
+		self.stations_list =[]
 
 	def __init__(self, start, end, day, hour ):
 		self.start = start
@@ -86,6 +101,7 @@ class Deplacement:
 		self.day = day
 		self.hour = hour
 		self.tag = "none"
+		self.stations_list =[]
 
 	def __init__(self, start, end, day, hour ,tag):
 		self.start = start
@@ -93,6 +109,13 @@ class Deplacement:
 		self.day = day
 		self.hour = hour
 		self.tag = tag
+		self.stations_list =[]
+
+	def compute_station_list(self):
+		start_station = closest__station_of(self.start)
+		end_station = closest__station_of(self.end)
+		self.stations_list = shortest_path_stations[(start_station, end_station)]
+
 
 	def print_d(self):
 		print(self.day,self.hour,self.start,self.end,self.tag)
@@ -457,14 +480,16 @@ if __name__ == "__main__":
 		fam = generate_family()
 		for p in fam:
 			l_p.append(p)
-	print("generating  persons --- %s seconds ---" % (time.time() - start_time))	
-	start_time = time.time()
+	print("generating  persons --- %s seconds ---" % (time.time() - start_time))
+
+
+"""	start_time = time.time()
 	xml_total(l_p)
 	print("generating xml --- %s seconds ---" % (time.time() - start_time))	
 	display_travels(l_p, 0)
 	display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
 	pl.show()
-"""
+
 	print("\n student ")
 
 	for d in person_student.travels:
