@@ -112,6 +112,7 @@ def generate_transportation():
     p2 = Point(-3000, 1000)
     path = it.shortest_path(graph, p1, p2)
     dis.display_path_on_network(p1, p2, path, network, 'path on a network')
+    xml.generate_xml(network)
     return network, stations, graph, hubs
 
 if __name__ == "__main__":
