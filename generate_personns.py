@@ -9,8 +9,11 @@ import xml.etree as etree
 from xml.etree import ElementTree
 import xml.etree.cElementTree as ET
 import xml.dom.minidom
- 
+import generate_station_names as nm
 
+from config import *
+ 
+"""
 
 ############ global variables ###############
 
@@ -48,6 +51,8 @@ density_grosseries_outer = .5
 
 p_not_celib = 1
 p_nb_child = [.2,.5, .75, .85, .95, 1]
+
+"""
 
 ################# basic fonctions ##################
 
@@ -231,6 +236,22 @@ class Personn:
 				d1 = Deplacement(act_loc , self.home ,day, end,"home")
 				self.travels.append(d1)
 
+	def display(self):
+		print('My name is ' + self.name)
+		print('I am ' + str(self.age) + ' y.o.')
+		print('I live in ' + str(self.home))
+		print('I work as a ' + self.work.type + ' in ' + str(self.work_place))
+		print('I like :')
+		for activity in self.activities:
+			print(activity.type)
+		print('My travels :')
+		for travel in self.travels:
+			print('On ' + str(travel.day) + ', ' + str(travel.hour))
+			print(str(travel.tag))
+			print('Begins at ' + str(travel.start) + ' and ends at ' + str(travel.end))
+		
+
+
 
 
 ############### localisation choice ##################
@@ -366,6 +387,14 @@ def generate_family():
 			family = add_child(family)
 		return(family)
 
+def generate_random_names(n_masc, n_fem):
+	all_names = nm.fetch_first_names()
+	all_masc_names = [name for name in all_names.keys() if all_names[name] == 'm']
+	all_fem_names = [name for name in all_names.keys() if all_names[name] == 'f']
+	masc_names = random.sample(all_masc_names, n_masc)
+	fem_names = random.sample(all_fem_names, n_fem)
+	return masc_names, fem_names
+
 ##################### displaying travels####################
 
 def clean_travel(d):
@@ -499,6 +528,17 @@ def xml_total(l_p):
 	tree = ET.ElementTree(root)
 	tree.write("persons.xml")
 
+
+def generate_personns(shortest_path_stations):
+	l_p = []
+	for i in range(size_pop):
+		if 100*i%(size_pop)==0:
+			print(100*i/(size_pop))
+		fam = generate_family()
+		for p in fam:
+			print(len(p.family))
+			l_p.append(p)
+	return l_p
 
 ######################## lets do tests #######################
 

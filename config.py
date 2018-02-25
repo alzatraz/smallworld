@@ -1,3 +1,53 @@
+
+#########################################
+# Color settings for trip visualization #
+#########################################
+
+pi = 3.14159265359 
+color_work = (1, 0, 0, 1)
+color_activity = (0, 1, 0, 1)
+color_home = (0, 0, 1, 1)
+
+######################
+# Trip probabilities #
+######################
+
+p_outing_work = .5
+p_outing_not_work = .8
+p_live_center = .07
+p_work_center = .8
+
+#########################
+# Geographic parameters #
+#########################
+
+r_center_paris = 3000
+max_r = 7000
+density_cinema_center = 97/105.1
+density_cinema_outer = .2
+
+density_sport_center = .5
+density_sport_outer = .5
+
+density_grosseries_center = .5
+density_grosseries_outer = .5
+
+#####################
+# Family parameters #
+#####################
+
+p_not_celib = 1
+p_nb_child = [.2,.5, .75, .85, .95, 1]
+size_pop = 100
+
+
+###################
+# Simulation time #
+###################
+nb_of_days = 7
+
+
+
 ##########################################
 # To generate the number of 'slow' lines #
 ##########################################
@@ -12,7 +62,7 @@ n_lines_sigma = 3  # standard deviation for the number of lines
 # To generate the terminals of the lines #
 ##########################################
 
-r_line_mu = 5000  # average distance between a line terminal and the center
+r_line_mu = max_r  # average distance between a line terminal and the center
 r_line_sigma = 1000  # average standard deviation for the distance between 
 				     # theline terminal and the city center
 

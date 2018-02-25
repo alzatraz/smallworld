@@ -14,6 +14,9 @@ def convert_Network_to_Graph(network):
             graph.add_edge(stations[i-1], stations[i])
     return graph
 
+def all_shortest_paths(graph):
+    return nx.all_pairs_shortest_path(graph)
+
 def shortest_path(graph, departure, arrival):
     stations = list(graph.nodes())
     departure_station = stations[0]
