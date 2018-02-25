@@ -517,7 +517,7 @@ if __name__ == "__main__":
 	for i in range(nb_of_days):
 		display_travels(l_p, [i])
 		display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
-		#display_work(l_p)
+		 #display_work(l_p)
 		pl.show()
 
 """

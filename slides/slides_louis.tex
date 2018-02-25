@@ -19,10 +19,15 @@
 Center : working \\
 Subburbs : housing \\
 (all probabilistic)\\
-\includegraphics[scale=.5]{subburb}
+\includegraphics<2>[scale=.3]{images/work_repartition_1000}
 
-
+\includegraphics<3>[scale=.3]{images/home_repartition_10000}
 \end{frame}
+
+\begin{frame}{Activities}
+For now : uniform generation + some more on the hubs
+\end{frame}
+
 \subsection{A person}
 
 \begin{frame}{A person}
@@ -43,18 +48,17 @@ Subburbs : housing \\
 \begin{block}{How to differentiate}
 Typical activities\\
 Days worked \\
-Work position
+Work location distribution
 \end{block}
 
 \begin{alertblock}{Persons type}
 \begin{itemize}
 \item Students : work near home location, ludic activities, student weak
 \item White collar : working in center, groceries, different work shedule
-\item Unenmployed : 
+\item Unenmployed, outdoor work \ldots
 \end{itemize}
 
 \end{alertblock}
-
 
 \end{frame}
 
@@ -62,6 +66,49 @@ Work position
 \begin{frame}{Generating families}
 \begin{itemize}
 \item one or two parents
-\item several childs
+\item several childs 
 \end{itemize}
+
+\begin{alertblock}{modularity}
+Proba of being single\\
+Number of child proba repartition\\
+Monoparental families...
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Planning}
+Being at work during worktime\\
+Random activity on day activity\\
+Going back to home to sleep\\
+\begin{block}{demonstration}
+\end{block}
+\begin{alertblock}{Modularity}
+Depending on other people, family\\
+More activities\\
+Special activities only on some locations\\
+Special events (worldcup etc...)
+\end{alertblock}
+\end{frame}
+
+\section{Merging the project}
+
+\subsection{Deplacement}
+
+\begin{frame}{}
+Deplacement from $x$ to $y$ :\\
+$s_x$, $s_y$ the stations\\
+Shortest\_path($s_x$, $s_y$)
+
+\begin{alertblock}{Use of the different lines}
+How many persons use it ?\\
+Shedules\\
+Breakdown sensibility
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{To go further}
+Special events\\
+Adding other way of deplacement\\
+Feeding it as a blackbox to other learning algorithm 
+
 \end{frame}

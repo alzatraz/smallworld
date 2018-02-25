@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.2.10)  25 FEB 2018 16:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.2.10)  25 FEB 2018 18:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1289,6 +1289,58 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 
 ] [5
 
+]
+<images/work_repartition_1000.png, id=248, 987.2082pt x 495.0495pt>
+File: images/work_repartition_1000.png Graphic file (type png)
+
+<use images/work_repartition_1000.png>
+Package pdftex.def Info: images/work_repartition_1000.png used on input line 25
+.
+(pdftex.def)             Requested size: 296.16475pt x 148.51599pt.
+ [6
+
+ <./images/work_repartition_1000.png>] <images/home_repartition_10000.png, id=2
+88, 987.2082pt x 495.0495pt>
+File: images/home_repartition_10000.png Graphic file (type png)
+
+<use images/home_repartition_10000.png>
+Package pdftex.def Info: images/home_repartition_10000.png used on input line 2
+5.
+(pdftex.def)             Requested size: 296.16475pt x 148.51599pt.
+ [7
+
+ <./images/home_repartition_10000.png>] [8
+
+] [9
+
+] [10
+
+] [11
+
+]
+LaTeX Font Info:    Try loading font information for U+msa on input line 104.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 104.
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+stmry on input line 104.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
+LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
+line 104.
+
+(/usr/share/texlive/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
+File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
+thkerncmss.
+)
+[12
+
+] [13
+
 ])
 \tf@nav=\write6
 \openout6 = `slides_smallworld.nav'.
@@ -1301,19 +1353,12 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 42.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 42.
-
-(./slides_smallworld.aux)
+ (./slides_smallworld.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 42.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 42.
+Package rerunfilecheck Info: File `slides_smallworld.out' has not changed.
+(rerunfilecheck)             Checksum: 5611E11F6E412B68A9E1E40BEB0BD17F;374.
 
-
-Package rerunfilecheck Warning: File `slides_smallworld.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `slides_smallworld.out':
-(rerunfilecheck)             Before: 5F24DDBBC068E2AABBE321B5F728F9BD;181
-(rerunfilecheck)             After:  A1E80C5C6F57D069BA511074F8DE7CAE;187.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
@@ -1321,20 +1366,22 @@ LaTeX Font Warning: Size substitutions with differences
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 42.
  ) 
 Here is how much of TeX's memory you used:
- 18103 strings out of 493029
- 342070 string characters out of 6136234
- 424674 words of memory out of 5000000
- 21212 multiletter control sequences out of 15000+600000
- 5757 words of font info for 21 fonts, out of 8000000 for 9000
+ 18260 strings out of 493029
+ 345431 string characters out of 6136234
+ 428677 words of memory out of 5000000
+ 21318 multiletter control sequences out of 15000+600000
+ 11307 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 56i,19n,60p,414b,754s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,19n,60p,414b,762s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb>
-Output written on slides_smallworld.pdf (5 pages, 43915 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb>
+Output written on slides_smallworld.pdf (13 pages, 258846 bytes).
 PDF statistics:
- 201 PDF objects out of 1000 (max. 8388607)
- 179 compressed objects within 2 object streams
- 14 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 577 PDF objects out of 1000 (max. 8388607)
+ 530 compressed objects within 6 object streams
+ 33 named destinations out of 1000 (max. 500000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -14,10 +14,27 @@
 \headcommand {\beamer@subsectionentry {0}{2}{1}{4}{General Idea}}\headcommand {\beamer@subsectionpages {4}{3}}
 \headcommand {\slideentry {2}{1}{1}{4/4}{General Idea}{0}}
 \headcommand {\beamer@framepages {4}{4}}
-\headcommand {\slideentry {2}{1}{2}{5/5}{General Idea}{0}}
-\headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@partpages {1}{5}}
-\headcommand {\beamer@subsectionpages {4}{5}}
-\headcommand {\beamer@sectionpages {4}{5}}
-\headcommand {\beamer@documentpages {5}}
-\headcommand {\def \inserttotalframenumber {5}}
+\headcommand {\slideentry {2}{1}{2}{5/7}{General Idea}{0}}
+\headcommand {\beamer@framepages {5}{7}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{8}{A person}}\headcommand {\beamer@subsectionpages {4}{7}}
+\headcommand {\slideentry {2}{2}{1}{8/8}{A person}{0}}
+\headcommand {\beamer@framepages {8}{8}}
+\headcommand {\slideentry {2}{2}{2}{9/9}{A person}{0}}
+\headcommand {\beamer@framepages {9}{9}}
+\headcommand {\slideentry {2}{2}{3}{10/10}{A person}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\slideentry {2}{2}{4}{11/11}{A person}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\sectionentry {3}{Merging the two random generations}{12}{Merging the two random generations}{0}}
+\headcommand {\beamer@sectionpages {4}{11}}
+\headcommand {\beamer@subsectionpages {8}{11}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{12}{Deplacement}}\headcommand {\beamer@subsectionpages {12}{11}}
+\headcommand {\slideentry {3}{1}{1}{12/12}{Deplacement}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\slideentry {3}{1}{2}{13/13}{Deplacement}{0}}
+\headcommand {\beamer@framepages {13}{13}}
+\headcommand {\beamer@partpages {1}{13}}
+\headcommand {\beamer@subsectionpages {12}{13}}
+\headcommand {\beamer@sectionpages {12}{13}}
+\headcommand {\beamer@documentpages {13}}
+\headcommand {\def \inserttotalframenumber {11}}
