@@ -5,6 +5,11 @@ import pylab as pl
 from matplotlib import collections  as mc
 from matplotlib.patches import Circle, Wedge, Polygon
 import time
+import xml.etree as etree
+from xml.etree import ElementTree
+import xml.etree.cElementTree as ET
+import xml.dom.minidom
+
  
 
 
@@ -17,10 +22,10 @@ color_activity = (0, 1, 0, 1)
 color_home = (0, 0, 1, 1)
 
 ########## play with that###########
-nb_of_days = 5
+nb_of_days = 7
 p_outing_work = .8
 p_outing_not_work = .8
-size_pop = 220000
+size_pop = 10
 
 r_center_paris = 3000
 max_r = 10000
@@ -36,7 +41,8 @@ density_sport_outer = .5
 density_grosseries_center = .5
 density_grosseries_outer = .5
 
-
+p_solo = .1
+p_nb_child = [.2,.5, .75, .85, .95, 1]
 
 ################# basic fonctions ##################
 
@@ -127,6 +133,8 @@ class Activity_real:
 		self.type = act.type
 		self.shedule  = compute_shedule(act.possible_shedule, act.duration,day, p.planning)
 
+def give_id():
+	return(int(random.random()*1000000))
 
 class Personn:
 	def __init__(self):
@@ -139,9 +147,12 @@ class Personn:
 		self.activities = []
 		self.planning = {}
 		self.travels  = []
+		self.id = give_id()
+		self.family = []
 
-	def __init__(self,age,home,work_place,work,activities):
+	def __init__(self, age,home,work_place,work,activities):
 		self.name = "pablo"
+		self.id = give_id()		
 		self.work = work
 		self.work_place = work_place
 		self.age = age
@@ -278,9 +289,8 @@ act_white_collar = [act_cinema, act_grosseries, act_sport]
 
 ##################### generating personns ##########################################
 
-def generate_student():
+def generate_student(home_loc ):
 	age = int(10 + random.random()*10)
-	home_loc = random_home_location()
 	work_loc = random_in_area(home_loc, 1000)
 	person_student = Personn(age, home_loc, work_loc , work_student, act_student)
 	person_student.add_job()
@@ -289,9 +299,8 @@ def generate_student():
 	return(person_student)
 
 
-def generate_white_collar():
+def generate_white_collar(home_loc ):
 	age = int(20 + random.random()*40)
-	home_loc = random_home_location()
 	work_loc = random_work_location()
 	person_wc = Personn(age, home_loc, work_loc , work_white_collar, act_white_collar)
 	person_wc.add_job()
@@ -299,7 +308,40 @@ def generate_white_collar():
 	person_wc.compute_deplacement()
 	return(person_wc)
 
+def add_marital_personn(fam):
+	n_fam = fam
+	sec_wc = generate_white_collar(fam[0].home)
+	for p in fam:
+		p.family.append(sec_wc)
+		sec_wc.family.append(p)
+	fam.append(sec_wc)
+	return(n_fam)
 
+def add_child(fam):
+	n_fam = fam
+	sec_wc = generate_student(fam[0].home)
+	for p in fam:
+		p.family.append(sec_wc)
+		sec_wc.family.append(p)
+	fam.append(sec_wc)
+	return(n_fam)
+
+def generate_family():
+	family =[]
+	one_wc = generate_white_collar(random_home_location())
+	family.append(one_wc)
+	
+	r = random.random()
+	if r<p_solo:
+		return(family)
+	family = add_marital_personn(family)
+	
+	r = random.random()
+	i=0
+	while(r>p_nb_child[i]):
+		i+=1
+		family = add_child(family)
+	return(family)
 
 ##################### displaying travels####################
 
@@ -353,6 +395,56 @@ def display_travels(list_p, day):
 	ax.add_artist(circle1)
 	ax.add_artist(circle2)
 
+##########################  CREATION OF the xml file ##########
+
+def xml_travel(t, father):
+	travel = ET.SubElement(father, "travel", name = t.tag)
+	start  = ET.SubElement(travel, "start")
+	ET.SubElement(start, "x", value = str(t.start[0]))
+	ET.SubElement(start, "y", value = str(t.start[1]))
+	end  = ET.SubElement(travel, "end")
+	ET.SubElement(end, "x", value = str(t.end[0]))
+	ET.SubElement(end, "y", value = str(t.end[1]))
+	day = ET.SubElement(travel, "day", value = str(t.day))
+	hour = ET.SubElement(travel, "hour", value = str(t.hour))
+	
+def xml_family(p, father):
+	if len(p.family)>0:
+		ET.SubElement(father, "wife", value = str(p.family[0].id))
+		for i in range(len(p.family)-1):
+			ET.SubElement(father, "child", value = str(p.family[i+1].id))
+
+
+def xml_personn(p,father):
+	pers_n = ET.SubElement(father, "person", value=str(p.id))
+	home_n = ET.SubElement(pers_n,"home")
+	ET.SubElement(home_n,"x", value = str(p.home[0]))
+	ET.SubElement(home_n,"y", value = str(p.home[1]))
+	ET.SubElement(pers_n,"name").text = (p.name)
+	ET.SubElement(pers_n,"age", value = str(p.age))
+	family = ET.SubElement(pers_n,"family", value = str(len(p.family)))
+	xml_family(p,family)
+	work_n = ET.SubElement(pers_n,"work")
+	work_loc_n = ET.SubElement(work_n,"work_location")
+	ET.SubElement(work_loc_n,"x", value = str(p.work_place[0]))
+	ET.SubElement(work_loc_n,"y", value = str(p.work_place[1]))	
+	ET.SubElement(work_n,"work_shedule", name="shedule" )
+	travels = ET.SubElement(pers_n,"travels")
+	for t in p.travels:
+		xml_travel(t , travels)
+
+
+
+
+def xml_total(l_p):
+	root = ET.Element("root")
+	doc = ET.SubElement(root, "doc")
+	for p in l_p:
+		xml_personn(p, doc)
+	tree = ET.ElementTree(root)
+	tree.write("persons.xml")
+
+
 ######################## lets do tests #######################
 
 
@@ -362,17 +454,17 @@ if __name__ == "__main__":
 	for i in range(size_pop):
 		if 100*i%(size_pop)==0:
 			print(100*i/(size_pop))
-		person_student = generate_student()
-		person_wc = generate_white_collar()
-		l_p.append(person_student)
-		l_p.append(person_wc)
-
-	print("--- %s seconds ---" % (time.time() - start_time))	
-	'''
+		fam = generate_family()
+		for p in fam:
+			l_p.append(p)
+	print("generating  persons --- %s seconds ---" % (time.time() - start_time))	
+	start_time = time.time()
+	xml_total(l_p)
+	print("generating xml --- %s seconds ---" % (time.time() - start_time))	
 	display_travels(l_p, 0)
 	display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
 	pl.show()
-
+"""
 	print("\n student ")
 
 	for d in person_student.travels:
@@ -382,4 +474,4 @@ if __name__ == "__main__":
 
 	for d in person_wc.travels:
 		d.print_d()
-	'''
+"""
