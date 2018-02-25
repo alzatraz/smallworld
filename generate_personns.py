@@ -30,11 +30,11 @@ closest_station = {}
 nb_of_days = 7
 p_outing_work = .8
 p_outing_not_work = .8
-size_pop = 10
+size_pop = 10000
 
 r_center_paris = 3000
 max_r = 10000
-p_live_center = .1
+p_live_center = .07
 p_work_center = .8
 
 density_cinema_center = 97/105.1
@@ -396,8 +396,22 @@ def display_activities(cinemas, grosseries, sports):
 		l_y.append(y)
 	pl.plot(l_x, l_y, 'mo', ms = 1.5)
 
-
-
+def display_home(list_p):
+	fig, ax = pl.subplots()
+	ax.autoscale()
+	ax.margins(0.1)
+	circle1 = Circle((0, 0), r_center_paris,color = 'r', alpha = .1)
+	circle2 = Circle((0, 0), max_r,color = 'blue', alpha = .1)
+	ax.add_artist(circle1)
+	ax.add_artist(circle2)
+	l_x = []
+	l_y = []
+	for p in list_p:
+		x = p.home[0]
+		y = p.home[1]
+		l_x.append(x)
+		l_y.append(y)
+	pl.plot(l_x, l_y, 'ko',ms = 2.5)
 
 def display_travels(list_p, day):
 	to_disp =[]
@@ -481,17 +495,18 @@ if __name__ == "__main__":
 		for p in fam:
 			l_p.append(p)
 	print("generating  persons --- %s seconds ---" % (time.time() - start_time))
-
-
-"""	start_time = time.time()
-	xml_total(l_p)
-	print("generating xml --- %s seconds ---" % (time.time() - start_time))	
-	display_travels(l_p, 0)
-	display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
+	#display_travels(l_p, 0)
+	#display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
+	display_home(l_p)
 	pl.show()
 
+"""
+	start_time = time.time()
+	xml_total(l_p)
+	print("generating xml --- %s seconds ---" % (time.time() - start_time))	
+"""	
+"""	
 	print("\n student ")
-
 	for d in person_student.travels:
 		d.print_d()
 

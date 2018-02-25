@@ -1,4 +1,4 @@
 \beamer@endinputifotherversion {3.36pt}
 \beamer@sectionintoc {1}{la pr\IeC {\'e}sentation d'adele}{3}{0}{1}
-\beamer@sectionintoc {2}{la pr\IeC {\'e}sentation de louis}{4}{0}{2}
-\beamer@subsectionintoc {2}{1}{ca marche}{4}{0}{2}
+\beamer@sectionintoc {2}{Generating persons deplacement}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{General Idea}{4}{0}{2}
