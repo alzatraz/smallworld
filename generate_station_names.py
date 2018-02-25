@@ -9,7 +9,7 @@ import csv
 ####################
 
 def fetch_countries():
-    page = open("countries.txt", "r")
+    page = open("data/countries.txt", "r")
     page = str(page.read())
 
     country_names = {}
@@ -32,7 +32,7 @@ def fetch_countries():
 
 def fetch_names():
     names = {}
-    file = open("names.txt", "r")
+    file = open("data/names.txt", "r")
     file = str(file.read())
     file = file.split("\n")
     for item in file:
@@ -43,7 +43,7 @@ def fetch_names():
 
 def fetch_first_names():
     first_names = {}
-    file = open("first_names.csv", "r", encoding = "ISO-8859-1")
+    file = open("data/first_names.csv", "r", encoding = "ISO-8859-1")
     for line in file:
         if 'french' in line:
             line = line.split(';')
