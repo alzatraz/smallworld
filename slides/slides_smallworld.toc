@@ -6,5 +6,5 @@
 \beamer@subsectionintoc {2}{3}{Schedule}{15}{0}{2}
 \beamer@sectionintoc {3}{Generating persons deplacement}{17}{0}{3}
 \beamer@subsectionintoc {3}{1}{General Idea}{17}{0}{3}
-\beamer@subsectionintoc {3}{2}{A person}{23}{0}{3}
-\beamer@sectionintoc {4}{Merger of the two projects}{27}{0}{4}
+\beamer@subsectionintoc {3}{2}{A person}{22}{0}{3}
+\beamer@sectionintoc {4}{Merger of the two projects}{26}{0}{4}

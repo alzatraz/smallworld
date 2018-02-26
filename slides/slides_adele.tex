@@ -139,7 +139,7 @@
 		level 1/.style={sibling distance=50mm},
 		level 2/.style={sibling distance=18mm},
 		level 3/.style={sibling distance=30mm},
-		level 4/.style={sibling distance=17mm},
+		level 4/.style={sibling distance=18mm},
 		level 5/.style={sibling distance=10mm},
 		every node/.style = {shape=rectangle,
 			draw, align=center,
@@ -170,15 +170,17 @@
 
 \subsection{Schedule}
 \begin{frame}{Schedule -- main steps}
-	Station schedule $Rightarrow$ point to point travel times.
+	Station schedule $\Rightarrow$ point to point travel times.
 	\begin{block}{Steps}
 		\begin{enumerate}
 		\item Travel times between stations $\propto$ line speed, distance.
 		\item Departure times from terminals $\propto$ moment of the day.
-		\item Propagate the departure times along the line using the values computed at first step.
-		\item Use the schedule to compute a shortest path that is sensitive to de day/hour of departure (\textbf{not implemented})
+		\item Propagate departure times along the line.
 		\end{enumerate}
 	\end{block} 
+	\begin{alertblock}{Not yet implemented...}
+		Use the schedule to compute a shortest path that is sensitive to de day/hour of departure !
+	\end{alertblock}
 \end{frame}
 \begin{frame}{Schedule --  illustration}
 	\begin{figure}
@@ -186,4 +188,4 @@
 		\includegraphics[width=\linewidth]{images/schedule.png}
 		\caption{Computation of a line of the schedule for one subway line}
 	\end{figure}
-\end{frame}0
+\end{frame}

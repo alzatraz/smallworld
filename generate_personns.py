@@ -391,7 +391,6 @@ def generate_family(names, stations, shortest_path_stations):
 	family.append(one_wc)
 	r = random.random()
 	if r<p_not_celib:
-		print("is ok")
 		return(family)
 	else:
 		name = names.pop()
@@ -427,6 +426,15 @@ def clean_travel(d):
 	if d.tag=="work":
 		col = color_work
 	return([d.start, d.end],col)
+
+def clean_travel_station(d):
+	list_d = []
+	act = d.start
+	for s in d.stations_list:
+		list_d.append([act, s])
+		act = s
+	list_d.append([act, d.end])
+	return(list_d)
 
 def display_activities(cinemas, grosseries, sports):
 	l_x = []
@@ -502,6 +510,40 @@ def display_travels(list_p, days = range(nb_of_days)):
 	ax.add_artist(circle1)
 	ax.add_artist(circle2)
 
+
+def clean_list(l):
+	d = {}
+	new_l = []
+	poids = []
+	for i in l:
+		if i in d.keys():
+			d[i]+=1
+		else:
+			d[i] = 1
+	for (key,value) in d.items():
+		new_l.append(key)
+		poids.append(value)
+
+def display_travels_station(list_p, days = range(nb_of_days)):
+	to_disp =[]
+	colors =[]
+	for p in list_p:
+		l_t = p.travels
+		for t in l_t:
+			if t.day in days:
+				to_add = clean_travel_station(t)
+				to_disp +=(to_add)
+	pos, w = [clean_list(to_disp)]
+	lc = mc.LineCollection(pos,linewidths=w)
+	fig, ax = pl.subplots()
+	ax.add_collection(lc)
+	ax.autoscale()
+	ax.margins(0.1)
+	circle1 = Circle((0, 0), r_center_paris,color = 'r', alpha = .1)
+	circle2 = Circle((0, 0), max_r,color = 'blue', alpha = .1)
+	ax.add_artist(circle1)
+	ax.add_artist(circle2)
+
 ##########################  CREATION OF the xml file ##########
 
 def xml_travel(t, father):
@@ -560,7 +602,6 @@ def generate_personns(shortest_path_stations, stations):
 			print(100*i/(size_pop))
 		fam = generate_family(names, stations, shortest_path_stations)
 		for p in fam:
-			print(len(p.family))
 			l_p.append(p)
 	return l_p
 
@@ -579,7 +620,7 @@ if __name__ == "__main__":
 			l_p.append(p)
 	print("generating  persons --- %s seconds ---" % (time.time() - start_time))
 	for i in range(nb_of_days):
-		display_travels(l_p, [i])
+		display_travels_stations(l_p, [i])
 		display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
 		#display_work(l_p)
 		pl.show()
