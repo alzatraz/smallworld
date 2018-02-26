@@ -479,6 +479,27 @@ def display_travels(list_p, days = range(nb_of_days)):
 	ax.add_artist(circle1)
 	ax.add_artist(circle2)
 
+def display_travels_station(list_p, days = range(nb_of_days)):
+	to_disp =[]
+	colors =[]
+	for p in list_p:
+		l_t = p.travels
+		for t in l_t:
+			if t.day in days:
+				to_print = clean_travel(t)
+				to_disp.append(to_print[0])
+				colors.append(to_print[1])
+	lc = mc.LineCollection(to_disp,colors=colors,linewidths=1)
+	fig, ax = pl.subplots()
+	ax.add_collection(lc)
+	ax.autoscale()
+	ax.margins(0.1)
+	circle1 = Circle((0, 0), r_center_paris,color = 'r', alpha = .1)
+	circle2 = Circle((0, 0), max_r,color = 'blue', alpha = .1)
+	ax.add_artist(circle1)
+	ax.add_artist(circle2)
+
+
 ##########################  CREATION OF the xml file ##########
 
 def xml_travel(t, father):

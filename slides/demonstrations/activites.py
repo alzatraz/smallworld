@@ -355,7 +355,6 @@ def generate_family():
 	family.append(one_wc)
 	r = random.random()
 	if r<p_not_celib:
-		print("is ok")
 		return(family)
 	else:
 		family = add_marital_personn(family)
@@ -376,25 +375,26 @@ def clean_travel(d):
 		col = color_work
 	return([d.start, d.end],col)
 
+size_of_points = 2.5
 def display_activities(cinemas, grosseries, sports):
 	l_x = []
 	l_y = []
 	for (x,y) in cinemas:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'ko',ms = 1.5)
+	pl.plot(l_x, l_y, 'ko',ms = size_of_points)
 	l_x = []
 	l_y = []
 	for (x,y) in grosseries:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'yo',ms = 1.5)
+	pl.plot(l_x, l_y, 'yo',ms = size_of_points)
 	l_x = []
 	l_y = []
 	for (x,y) in sports:
 		l_x.append(x)
 		l_y.append(y)
-	pl.plot(l_x, l_y, 'mo', ms = 1.5)
+	pl.plot(l_x, l_y, 'mo', ms = size_of_points)
 
 def display_work(list_p):
 	fig, ax = pl.subplots()
@@ -508,10 +508,9 @@ if __name__ == "__main__":
 	l_p = []
 	for i in range(size_pop):
 		if 100*i%(size_pop)==0:
-			print(100*i/(size_pop))
+			print("percentage done: "+str(100*i/(size_pop))+"%")
 		fam = generate_family()
 		for p in fam:
-			print(len(p.family))
 			l_p.append(p)
 	print("generating  persons --- %s seconds ---" % (time.time() - start_time))
 	for i in range(nb_of_days):
