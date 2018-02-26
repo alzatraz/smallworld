@@ -31,10 +31,6 @@ def generate_hubs():
     return hubs, filtered_stations
 
 def generate_transportation():
-
-    
-
-
     # Global topology : lines
     n_lines = geo.gaussian_trunc(n_lines_mini, n_lines_maxi, n_lines_mu,
                                  n_lines_sigma)
@@ -70,7 +66,7 @@ def generate_transportation():
     network = sch.compute_whole_schedule(network)
     stations = network.get_all_stations()
     graph = it.convert_Network_to_Graph(network)
-    all_shortest_paths = it.all_shortest_paths(graph)
+    all_shortest_paths = it.all_shortest_paths_and_lengths(graph)
     xml.generate_xml(network)
     return network, stations, all_shortest_paths, hubs
 
@@ -127,8 +123,8 @@ if __name__ == "__main__":
     stations = network.get_all_stations()
     from sympy.geometry import Point
     graph = it.convert_Network_to_Graph(network)
-    p1 = Point(3000, -1000)
-    p2 = Point(-3000, 1000)
+    p1 = Point(5000, 5000)
+    p2 = Point(-5000, -5000)
     path = it.shortest_path(graph, p1, p2)
     dis.display_path_on_network(p1, p2, path, network, 'path on a network')
     xml.generate_xml(network)

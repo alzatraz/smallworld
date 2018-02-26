@@ -10,6 +10,8 @@ from xml.etree import ElementTree
 import xml.etree.cElementTree as ET
 import xml.dom.minidom
 import generate_station_names as nm
+from sympy.geometry import Point
+
 
 from config import *
  
@@ -82,13 +84,17 @@ def choose_place(possible_places, origin):
 
 ######################### main classes #######################
 
-def closest_station_of(pos):
-	if pos in closest_station.keys():
-		return(closest_station[pos])
-	else:
-		s = choose_place(stations, pos)
-		closest_station[pos] =s
-		return(s)
+def closest_station_of(pos, stations):
+	station_coords = [station.coords for station in stations]
+	p = Point(pos)
+	best_dist = p.distance(stations[0].coords)
+	best_station = stations[0]
+	for station in stations[1:]:
+		new_dist = p.distance(station.coords)
+		if new_dist < best_dist:
+			best_dist = new_dist
+			best_station = station
+	return best_station
 
 
 class Deplacement:
@@ -116,10 +122,15 @@ class Deplacement:
 		self.tag = tag
 		self.stations_list =[]
 
-	def compute_station_list(self):
-		start_station = closest__station_of(self.start)
-		end_station = closest__station_of(self.end)
-		self.stations_list = shortest_path_stations[(start_station, end_station)]
+	def compute_station_list(self, stations, shortest_path_stations):
+		start = Point(self.start)
+		end = Point(self.end)
+		start_station = closest_station_of(start, stations)
+		end_station = closest_station_of(end, stations)
+		shortest_path_transport, shortest_length_transport = shortest_path_stations[start_station][end_station]
+		shortest_by_foot = start.distance(end)/(5*60)
+		if shortest_by_foot > shortest_length_transport:
+			self.stations_list = shortest_path_transport
 
 
 	def print_d(self):
@@ -178,8 +189,8 @@ class Personn:
 		self.id = give_id()
 		self.family = []
 
-	def __init__(self, age,home,work_place,work,activities):
-		self.name = "pablo"
+	def __init__(self, name, age, home, work_place, work, activities):
+		self.name = name
 		self.id = give_id()		
 		self.work = work
 		self.work_place = work_place
@@ -224,16 +235,18 @@ class Personn:
 					a_real = Activity_real(a,self,d)
 					self.planning[d].append( (a_real.place, a_real.shedule[0], a_real.shedule[1] , "activity" )  )				
 
-	def compute_deplacement(self):
+	def compute_deplacement(self, stations, shortest_path_stations):
 		for day in range(nb_of_days):
 			to_do = self.planning[day]
 			act_loc = self.home
-			for (loc , start, end,tag) in to_do:
-				d1 = Deplacement(act_loc , loc ,day, start,tag)
+			for (loc, start, end, tag) in to_do:
+				d1 = Deplacement(act_loc, loc , day, start, tag)
+				d1.compute_station_list(stations, shortest_path_stations)
 				act_loc = loc
 				self.travels.append(d1)
 			if(act_loc!=self.home):
 				d1 = Deplacement(act_loc , self.home ,day, end,"home")
+				d1.compute_station_list(stations, shortest_path_stations)
 				self.travels.append(d1)
 
 	def display(self):
@@ -249,6 +262,7 @@ class Personn:
 			print('On ' + str(travel.day) + ', ' + str(travel.hour))
 			print(str(travel.tag))
 			print('Begins at ' + str(travel.start) + ' and ends at ' + str(travel.end))
+			print([station.name for station in travel.stations_list])
 		
 
 
@@ -333,67 +347,76 @@ act_white_collar = [act_cinema, act_grosseries, act_sport]
 
 ##################### generating personns ##########################################
 
-def generate_student(home_loc ):
+def generate_student(home_loc, name, stations, shortest_path_stations):
 	age = int(10 + random.random()*10)
 	work_loc = random_in_area(home_loc, 1000)
-	person_student = Personn(age, home_loc, work_loc , work_student, act_student)
+	person_student = Personn(name, age, home_loc, work_loc , work_student, act_student)
 	person_student.add_job()
 	person_student.add_activities()
-	person_student.compute_deplacement()
+	person_student.compute_deplacement(stations, shortest_path_stations)
 	return(person_student)
 
 
-def generate_white_collar(home_loc ):
+def generate_white_collar(home_loc, name, stations, shortest_path_stations):
 	age = int(20 + random.random()*40)
 	work_loc = random_work_location()
-	person_wc = Personn(age, home_loc, work_loc , work_white_collar, act_white_collar)
+	person_wc = Personn(name, age, home_loc, work_loc , work_white_collar, act_white_collar)
 	person_wc.add_job()
 	person_wc.add_activities()
-	person_wc.compute_deplacement()
+	person_wc.compute_deplacement(stations, shortest_path_stations)
 	return(person_wc)
 
-def add_marital_personn(fam):
+def add_marital_personn(fam, name):
 	n_fam = fam
-	sec_wc = generate_white_collar(fam[0].home)
+	sec_wc = generate_white_collar(fam[0].home, name)
 	for p in fam:
 		p.family.append(sec_wc)
 		sec_wc.family.append(p)
 	fam.append(sec_wc)
 	return(n_fam)
 
-def add_child(fam):
+def add_child(fam, name):
 	n_fam = fam
-	sec_wc = generate_student(fam[0].home)
+	sec_wc = generate_student(fam[0].home, name)
 	for p in fam:
 		p.family.append(sec_wc)
 		sec_wc.family.append(p)
 	fam.append(sec_wc)
 	return(n_fam)
 
-def generate_family():
+def generate_family(names, stations, shortest_path_stations):
 	family =[]
-	one_wc = generate_white_collar(random_home_location())
+	name = names.pop()
+	one_wc = generate_white_collar(random_home_location(), name, stations, shortest_path_stations)
 	family.append(one_wc)
 	r = random.random()
 	if r<p_not_celib:
 		print("is ok")
 		return(family)
 	else:
-		family = add_marital_personn(family)
+		name = names.pop()
+		family = add_marital_personn(family, name)
 		r = random.random()
 		i=0
 		while(r>p_nb_child[i]):
 			i+=1
-			family = add_child(family)
+			name = names.pop()
+			family = add_child(family, name)
 		return(family)
 
-def generate_random_names(n_masc, n_fem):
+"""def generate_random_names(n_masc, n_fem):
 	all_names = nm.fetch_first_names()
 	all_masc_names = [name for name in all_names.keys() if all_names[name] == 'm']
 	all_fem_names = [name for name in all_names.keys() if all_names[name] == 'f']
 	masc_names = random.sample(all_masc_names, n_masc)
 	fem_names = random.sample(all_fem_names, n_fem)
-	return masc_names, fem_names
+	return masc_names, fem_names"""
+
+def generate_random_names(size_pop):
+	all_names = nm.fetch_first_names()
+	names = all_names.keys()
+	names = random.sample(names, size_pop)
+	return names
 
 ##################### displaying travels####################
 
@@ -550,12 +573,13 @@ def xml_total(l_p):
 	tree.write("persons.xml")
 
 
-def generate_personns(shortest_path_stations):
+def generate_personns(shortest_path_stations, stations):
+	names = generate_random_names(size_pop)
 	l_p = []
 	for i in range(size_pop):
 		if 100*i%(size_pop)==0:
 			print(100*i/(size_pop))
-		fam = generate_family()
+		fam = generate_family(names, stations, shortest_path_stations)
 		for p in fam:
 			print(len(p.family))
 			l_p.append(p)
@@ -570,7 +594,7 @@ if __name__ == "__main__":
 	for i in range(size_pop):
 		if 100*i%(size_pop)==0:
 			print(100*i/(size_pop))
-		fam = generate_family()
+		fam = generate_family(names, stations, shortest_path_stations)
 		for p in fam:
 			print(len(p.family))
 			l_p.append(p)

@@ -14,8 +14,30 @@ def convert_Network_to_Graph(network):
             graph.add_edge(stations[i-1], stations[i])
     return graph
 
-def all_shortest_paths(graph):
-    return nx.all_pairs_shortest_path(graph)
+def all_shortest_paths_and_lengths(graph):
+    shortest_paths = {}
+    shortest_lengths = {}
+    paths = nx.all_pairs_shortest_path(graph)
+    lengths = nx.all_pairs_shortest_path_length(graph)
+
+    for path, length in zip(paths, lengths):
+        shortest_paths_from_source = {}
+        shortest_lengths_from_source = {}
+
+        source_path = path[0]
+        source_length = length[0]
+
+        shortest_paths_dict = path[1]
+        shortest_lengths_dict = length[1]
+
+        for target, path_source_target in shortest_paths_dict.items():
+            shortest_paths_from_source[target] = [path_source_target, None]
+        shortest_paths[source_path] = shortest_paths_from_source
+
+        for target, length_source_target in shortest_lengths_dict.items():
+            shortest_paths[source_length][target][1] = length_source_target
+    return shortest_paths
+
 
 def shortest_path(graph, departure, arrival):
     stations = list(graph.nodes())
