@@ -66,7 +66,7 @@ def generate_transportation():
     network = sch.compute_whole_schedule(network)
     stations = network.get_all_stations()
     graph = it.convert_Network_to_Graph(network)
-    all_shortest_paths = it.all_shortest_paths(graph)
+    all_shortest_paths = it.all_shortest_paths_and_lengths(graph)
     xml.generate_xml(network)
     return network, stations, all_shortest_paths, hubs
 
