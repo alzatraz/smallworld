@@ -622,7 +622,7 @@ if __name__ == "__main__":
 			l_p.append(p)
 	print("generating  persons --- %s seconds ---" % (time.time() - start_time))
 	for i in range(nb_of_days):
-		display_travels(l_p, [i])
+		display_travels_stations(l_p, [i])
 		display_activities(act_cinema.possible_places,act_grosseries.possible_places,act_sport.possible_places)
 		#display_work(l_p)
 		pl.show()
