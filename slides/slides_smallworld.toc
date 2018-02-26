@@ -9,3 +9,4 @@
 \beamer@subsectionintoc {3}{2}{A person}{23}{0}{3}
 \beamer@sectionintoc {4}{Merging the project}{27}{0}{4}
 \beamer@subsectionintoc {4}{1}{Deplacement}{27}{0}{4}
+\beamer@sectionintoc {5}{Merger of the two projects}{29}{0}{5}

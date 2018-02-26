@@ -69,8 +69,15 @@
 \headcommand {\beamer@framepages {27}{27}}
 \headcommand {\slideentry {4}{1}{2}{28/28}{Deplacement}{0}}
 \headcommand {\beamer@framepages {28}{28}}
-\headcommand {\beamer@partpages {1}{28}}
-\headcommand {\beamer@subsectionpages {27}{28}}
+\headcommand {\sectionentry {5}{Merger of the two projects}{29}{Merger of the two projects}{0}}
 \headcommand {\beamer@sectionpages {27}{28}}
-\headcommand {\beamer@documentpages {28}}
-\headcommand {\def \inserttotalframenumber {26}}
+\headcommand {\beamer@subsectionpages {27}{28}}
+\headcommand {\slideentry {5}{0}{1}{29/29}{}{0}}
+\headcommand {\beamer@framepages {29}{29}}
+\headcommand {\slideentry {5}{0}{2}{30/30}{}{0}}
+\headcommand {\beamer@framepages {30}{30}}
+\headcommand {\beamer@partpages {1}{30}}
+\headcommand {\beamer@subsectionpages {29}{30}}
+\headcommand {\beamer@sectionpages {29}{30}}
+\headcommand {\beamer@documentpages {30}}
+\headcommand {\def \inserttotalframenumber {28}}
