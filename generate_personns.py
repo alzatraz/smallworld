@@ -428,6 +428,15 @@ def clean_travel(d):
 		col = color_work
 	return([d.start, d.end],col)
 
+def clean_travel_station(d):
+	list_d = []
+	act = d.start
+	for s in d.stations_list:
+		list_d.append([act, s])
+		act = s
+	list_d.append([act, d.end])
+	return(list_d)
+
 def display_activities(cinemas, grosseries, sports):
 	l_x = []
 	l_y = []
@@ -502,6 +511,20 @@ def display_travels(list_p, days = range(nb_of_days)):
 	ax.add_artist(circle1)
 	ax.add_artist(circle2)
 
+
+def clean_list(l):
+	d = {}
+	new_l = []
+	poids = []
+	for i in l:
+		if i in d.keys():
+			d[i]+=1
+		else:
+			d[i] = 1
+	for (key,value) in d.items():
+		new_l.append(key)
+		poids.append(value)
+
 def display_travels_station(list_p, days = range(nb_of_days)):
 	to_disp =[]
 	colors =[]
@@ -509,10 +532,10 @@ def display_travels_station(list_p, days = range(nb_of_days)):
 		l_t = p.travels
 		for t in l_t:
 			if t.day in days:
-				to_print = clean_travel(t)
-				to_disp.append(to_print[0])
-				colors.append(to_print[1])
-	lc = mc.LineCollection(to_disp,colors=colors,linewidths=1)
+				to_add = clean_travel_station(t)
+				to_disp +=(to_add)
+	pos, w = [clean_list(to_disp)]
+	lc = mc.LineCollection(pos,linewidths=w)
 	fig, ax = pl.subplots()
 	ax.add_collection(lc)
 	ax.autoscale()
@@ -521,7 +544,6 @@ def display_travels_station(list_p, days = range(nb_of_days)):
 	circle2 = Circle((0, 0), max_r,color = 'blue', alpha = .1)
 	ax.add_artist(circle1)
 	ax.add_artist(circle2)
-
 
 ##########################  CREATION OF the xml file ##########
 
