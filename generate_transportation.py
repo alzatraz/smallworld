@@ -68,6 +68,7 @@ def generate_transportation():
     graph = it.convert_Network_to_Graph(network)
     all_shortest_paths = it.all_shortest_paths_and_lengths(graph)
     xml.generate_xml(network)
+    xml.generate_rdf(network)
     return network, stations, all_shortest_paths, hubs
 
 if __name__ == "__main__":    

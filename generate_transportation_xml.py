@@ -2,65 +2,6 @@ from rdflib import *
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 
-def write_preamble(file, tab):
-    file.write('<?xml version="1.0"?>\n')
-
-    file.write('<rdf:RDF\n')
-    file.write('xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n')
-    file.write('xmlns:trspt="http://smallworld.com/transportation#"\n')
-    file.write('xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">\n')
-    file.write(tab + '<rdf:Description\n')
-    file.write(tab + '  ' + 'rdf:about="http://smallworld.com/transportation">\n')
-    file.write(tab + '  ' + '<trspt:lines rdf:parseType="Collection">\n')
-
-def write_line(i, line, file, tab):
-    if type(i) == int:
-        path_name = 'M'+str(i)
-        line_name = 'Métro Ligne ' + str(i)
-        speed = 'slow'
-    else:
-        path_name = 'RER'+i
-        line_name = 'RER Ligne ' + i
-        speed = 'fast'
-    n_stations = str(len(line))
-    file.write(tab + '<rdf:Description rdf:about="http://smallworld.com/transportation/' + path_name + '"\n')
-    tab = tab + '  '     
-    file.write(tab + 'xmlns:line="http://smallworld.com/transportation/' + path_name + '#">\n')
-    file.write(tab + '<line:name>'+line_name+'</line:name>\n')
-    file.write(tab + '<line:speed>'+speed+'</line:speed>\n')
-    file.write(tab + '<line:number_of_stations>'+n_stations+'</line:number_of_stations>\n')    
-    file.write(tab + '<line:stations rdf:parseType="Collection">\n')
-    return path_name 
-
-def write_coords(point, file, tab):
-    x, y = point[0], point[1]
-    file.write(tab + '<geo:Point>\n')
-    file.write(tab + '  ' + '<geo:lat>' + str(x) + '</geo:lat>\n')
-    file.write(tab + '  ' + '<geo:long>' + str(y) + '</geo:long>\n')
-    file.write(tab + '</geo:Point>\n')
-
-
-def write_station2(path_name, station, file, tab):
-    point, number, name, schedule_forward, schedule_backward = station
-    file.write(tab + '<rdf:Description\n')
-    tab = tab + '  '
-    file.write(tab + 'rdf:about="http://www.smallworld.com/transportation/'+path_name+'/'+str(number)+'"\n')
-    file.write(tab + 'xmlns:station="http://smallworld.com/transportation/'+path_name+'/'+str(number)+'#">\n')
-    write_coords(point, file, tab)
-    file.write(tab + '<station:name>'+name+'</station:name>\n')
-    file.write(tab + '<station:number>'+str(number)+'</station:number>\n')
-    write_schedule('forward', schedule_forward, file, tab)
-    write_schedule('backward', schedule_forward, file, tab)
-
-
-def write_schedule2(direction, schedule, file, tab):
-    file.write(tab + '<station:schedule_'+direction+'>\n')    
-    file.write(tab + ' ' + '<rdf:Seq>\n')
-    for time in schedule:
-        file.write(tab + '    ' + '<rdf:li>'+time_tuple_to_string(time)+'</rdf:li>\n')
-    file.write(tab + '  ' + '</rdf:Seq>\n')
-    file.write(tab+ '</station:schedule_'+direction+'>\n') 
-
 def complete_with_zero(i):
     if i in range(0, 10):
         return ('0' + str(i))
@@ -72,59 +13,61 @@ def time_tuple_to_string(time_tuple):
         string_time = string_time + complete_with_zero(time) + ":"
     return string_time[:-1]
 
-def generate_xml2(lines_dict):
-    tab = '  '
-    file = open('transportation.xml','w') 
-    write_preamble(file, tab)
-    for i, line in lines_dict.items():
-        path_name = write_line(i, line, file, tab*3)
-        for station in line:
-            write_station(path_name, station, file, tab*5)
-            file.write(tab*5 + '</rdf:Description>\n')
-        file.write(tab*4 + '</line:stations>\n')
-        file.write(tab*3 + '</rdf:Description>\n')
-    file.write(tab*2 + '</trspt:lines>\n')
-    file.write(tab + '</rdf:Description>\n')
-    file.write('</rdf:RDF>')
-    file.close() 
 
-
-
-def generate_rdf(lines_dict):
+def generate_rdf(network):
     g = Graph()
     schema = Namespace('http://schema.org/')
     smallworld = 'http://smallworld.org/'
-    for i, stations in lines_dict.items():
-        if type(i) == int:
-            line_name = 'Métro Ligne ' + str(i)
-            line_path = 'M' + str(i)
+    for line in network.lines:
+        name = line.name
+        if type(name) == int:
+            line_name = 'Métro Ligne ' + str(name)
+            line_path = 'M' + str(name)
         else:
-            line_name = 'RER Ligne ' + i
-            line_path = 'RER' + i
+            line_name = 'RER Ligne ' + name
+            line_path = 'RER' + name
         line_path = smallworld + 'lines/' + line_path + '/'
-        line = URIRef(line_path)
-        g.add((line, schema.name, Literal(line_name)))
-        for j, station in enumerate(stations):
-            point, number, name, schedule_forward, schedule_backward = station
+        line_uri = URIRef(line_path)
+        g.add((line_uri, schema.name, Literal(line_name)))
+        schedule = line.schedule
+        wd_f, wd_b, we_f, we_b = schedule.wd_forward, schedule.wd_backward, schedule.we_forward, schedule.we_backward
+        for j, station in enumerate(line.stations):
+            wd_f_station, wd_b_station, we_f_station, we_b_station = wd_f[j], wd_b[j], we_f[j], we_b[j]
+            point = station.coords
+            station_name = station.name
             coords = BNode()
             g.add((coords, schema.latitude, Literal(point[0])))
             g.add((coords, schema.longitude, Literal(point[1])))
-            station = URIRef(smallworld + 'stations/' + name + '/')
-            g.add((station, schema.geo, coords))
-            g.add((line, schema.containsPlace, station))
-            g.add((station, schema.name, Literal(name)))
-            # g.add((line,)) order
-            departure_forward, departure_backward = BNode(), BNode()
-            g.add((line, schema.event, departure_forward))
-            g.add((line, schema.event, departure_backward))
-            for time_tuple in schedule_forward:
-                g.add((departure_forward, schema.subEvent, departure_forward))
+            station_uri = URIRef(smallworld + 'stations/' + str(name) + '/')
+            g.add((station_uri, schema.geo, coords))
+            g.add((line_uri, schema.containsPlace, station_uri))
+            g.add((station_uri, schema.name, Literal(station_name)))
+            dep_wd_f, dep_wd_b, dep_we_f, dep_we_b = BNode(), BNode(), BNode(), BNode()
+            g.add((line_uri, schema.event, dep_wd_f))
+            g.add((line_uri, schema.event, dep_wd_b))
+            g.add((line_uri, schema.event, dep_we_f))
+            g.add((line_uri, schema.event, dep_we_b))
+            for time_tuple in wd_f_station:
+                dep_wd_f_one = BNode()
+                g.add((dep_wd_f_one, schema.subEvent, dep_wd_f))
                 time = time_tuple_to_string(time_tuple)
-                g.add((departure_forward, schema.startDate, Literal(time)))
-            for time_tuple in schedule_backward:
-                g.add((departure_backward, schema.subEvent, departure_forward))
+                g.add((dep_wd_f_one, schema.startDate, Literal(time)))
+            for time_tuple in wd_b_station:
+                dep_wd_b_one = BNode()
+                g.add((dep_wd_b_one, schema.subEvent, dep_wd_b))
                 time = time_tuple_to_string(time_tuple)
-                g.add((departure_backward, schema.startDate, Literal(time)))
+                g.add((dep_wd_b_one, schema.startDate, Literal(time)))
+            for time_tuple in we_f_station:
+                dep_we_f_one = BNode()
+                g.add((dep_we_f_one, schema.subEvent, dep_we_f))
+                time = time_tuple_to_string(time_tuple)
+                g.add((dep_we_f_one, schema.startDate, Literal(time)))
+            for time_tuple in we_b_station:
+                dep_we_b_one = BNode()
+                g.add((dep_wd_b_one, schema.subEvent, dep_we_b))
+                time = time_tuple_to_string(time_tuple)
+                g.add((dep_wd_b_one, schema.startDate, Literal(time)))
+    g.serialize("xml_outputs/transportation.rdf")
     return g
 
 def write_schedule(line, schedule):
@@ -180,8 +123,6 @@ def generate_xml(network):
                     time = time_tuple_to_string(time_tuple)
                     time_xml = SubElement(schedule_xml, 'time')
                     time_xml.text = time
-
-
     ElementTree(network_xml).write('xml_outputs/transportation.xml') 
 
 if __name__ == "__main__":
