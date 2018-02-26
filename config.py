@@ -38,7 +38,7 @@ density_grosseries_outer = .5
 
 p_not_celib = 1
 p_nb_child = [.2,.5, .75, .85, .95, 1]
-size_pop = 3
+size_pop = 10
 
 
 ###################

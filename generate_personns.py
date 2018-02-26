@@ -94,7 +94,7 @@ def closest_station_of(pos, stations):
 		if new_dist < best_dist:
 			best_dist = new_dist
 			best_station = station
-	return station
+	return best_station
 
 
 class Deplacement:
@@ -130,9 +130,7 @@ class Deplacement:
 		shortest_path_transport, shortest_length_transport = shortest_path_stations[start_station][end_station]
 		shortest_by_foot = start.distance(end)/(5*60)
 		if shortest_by_foot > shortest_length_transport:
-			self.stations_list = shortest_path_stations
-		else:
-			self.stations_list = []
+			self.stations_list = shortest_path_transport
 
 
 	def print_d(self):
@@ -241,8 +239,8 @@ class Personn:
 		for day in range(nb_of_days):
 			to_do = self.planning[day]
 			act_loc = self.home
-			for (loc, start, end,tag) in to_do:
-				d1 = Deplacement(act_loc, loc , day, start,tag)
+			for (loc, start, end, tag) in to_do:
+				d1 = Deplacement(act_loc, loc , day, start, tag)
 				d1.compute_station_list(stations, shortest_path_stations)
 				act_loc = loc
 				self.travels.append(d1)
