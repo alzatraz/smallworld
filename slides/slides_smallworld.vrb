@@ -1,10 +1,12 @@
 \frametitle{Introduction}
 
-	The aim of the project was to mimic the people's behavior in a big city. It tackles the following problematics :
+	Mimic the people's behavior in a big city :
+	\begin{alertblock}{Problems}
 	\begin{itemize}
-		\item What do people do in their everyday life and at what time ?
-		\item In what kind of environment do they live and how do they interact with the infrastructures ?
+		\item Everyday life planning ?
+		\item Use of the transportation network ?
 	\end{itemize}
+	\end{alertblock}
 	Tools we used :
 	\begin{figure}
 		\centering

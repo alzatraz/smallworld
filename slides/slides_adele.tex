@@ -2,11 +2,13 @@
 
 \begin{frame}[fragile]{Introduction}
 	
-	The aim of the project was to mimic the people's behavior in a big city. It tackles the following problematics :
+	Mimic the people's behavior in a big city :
+	\begin{alertblock}{Problems}
 	\begin{itemize}
-		\item What do people do in their everyday life and at what time ?
-		\item In what kind of environment do they live and how do they interact with the infrastructures ?
+		\item Everyday life planning ?
+		\item Use of the transportation network ?
 	\end{itemize}
+	\end{alertblock}
 	Tools we used :
 	\begin{figure}
 		\centering
@@ -32,14 +34,14 @@
 \section{Transportation network}
 \subsection{Topology}
 \begin{frame}{Topology -- main steps}
-	We tried to model a subway network similar to the Parisian one.
+	Subway network $\sim$ Parisian ``metro''.
 	\begin{block}{Steps}
 		\begin{enumerate}
-			\item \textbf{Terminals} : subway lines modeled as segments.
-			\item \textbf{Intersections} : intersections between lines are glued together if they are close.
-			\item \textbf{Stations} : points at regular intervals (with a little noise).
-			\item \textbf{Hubs} : stations crossed by many lines
-			\item \textbf{Fast lines} : a few lines that connect close hubs together.
+			\item \textbf{Terminals} : line segments.
+			\item \textbf{Intersections} : point clustering.
+			\item \textbf{Stations} : points at regular intervals. 
+			\item \textbf{Hubs} : stations crossed by many lines.
+			\item \textbf{Fast lines} : connect hubs together.
 		\end{enumerate}
 	\end{block}
 \end{frame}
@@ -120,11 +122,11 @@
 
 \subsection{Toponymy}
 \begin{frame}{Toponymy -- main steps}
-	Generate a ``realistic'' name for each station, like ``Place Edith Piaf'', ``Rue de la Chine'' or ``Saint Marcel''
+	 ``Realistic'' stations' names, \textit{e.g.} ``Place Edith Piaf'', ``Rue de la Chine'' or ``Saint Marcel''...
 	\begin{block}{Steps}
 		\begin{enumerate}
-			\item \textbf{Data collection} : collect names from databases (country names, first names) or manually (famous people).
-			\item \textbf{Combine elements together} : use link words (``Place de la/le'', ``Saint(e)'', ``-''...) appropriately.
+			\item \textbf{Data collection} : collect from databases or manually.
+			\item \textbf{Combine elements together} : link words (``Place de la/le'', ``Saint(e)'', ``-''...).
 			\item \textbf{Do some tricks} : avoid things like ``Place d'Arc'' or ``Avenue de Maupassant''... 
 		\end{enumerate}
 	\end{block}
@@ -168,11 +170,11 @@
 
 \subsection{Schedule}
 \begin{frame}{Schedule -- main steps}
-	Generate a schedule for each station and deduce point to point travel times.
+	Station schedule $Rightarrow$ point to point travel times.
 	\begin{block}{Steps}
 		\begin{enumerate}
-		\item Compute travel times between stations, depending on the line speed and the distances between stations.
-		\item Generate departure times from the terminals with a frequency that varies during the day.
+		\item Travel times between stations $\propto$ line speed, distance.
+		\item Departure times from terminals $\propto$ moment of the day.
 		\item Propagate the departure times along the line using the values computed at first step.
 		\item Use the schedule to compute a shortest path that is sensitive to de day/hour of departure (\textbf{not implemented})
 		\end{enumerate}
@@ -184,4 +186,4 @@
 		\includegraphics[width=\linewidth]{images/schedule.png}
 		\caption{Computation of a line of the schedule for one subway line}
 	\end{figure}
-\end{frame}
+\end{frame}0

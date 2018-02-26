@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  26 FEB 2018 12:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  26 FEB 2018 15:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1388,48 +1388,48 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 \openout4 = `slides_smallworld.vrb'.
 
  (./slides_smallworld.vrb
-<images/python.png, id=232, 260.975pt x 265.99374pt>
+<images/python.png, id=211, 260.975pt x 265.99374pt>
 File: images/python.png Graphic file (type png)
  <use images/python.png>
-Package pdftex.def Info: images/python.png used on input line 13.
+Package pdftex.def Info: images/python.png used on input line 15.
 (pdftex.def)             Requested size: 36.87563pt x 37.58385pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 14.
+LaTeX Font Info:    Try loading font information for U+msa on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 14.
+LaTeX Font Info:    Try loading font information for U+msb on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+stmry on input line 14.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
-line 14.
+line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
 File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-<images/matplotlib.png, id=234, 412.54124pt x 412.54124pt>
+<images/matplotlib.png, id=213, 412.54124pt x 412.54124pt>
 File: images/matplotlib.png Graphic file (type png)
 
 <use images/matplotlib.png>
-Package pdftex.def Info: images/matplotlib.png used on input line 17.
+Package pdftex.def Info: images/matplotlib.png used on input line 19.
 (pdftex.def)             Requested size: 36.87563pt x 36.8753pt.
 
-<images/sympy.png, id=235, 1108.14pt x 733.74126pt>
+<images/sympy.png, id=214, 1108.14pt x 733.74126pt>
 File: images/sympy.png Graphic file (type png)
  <use images/sympy.png>
-Package pdftex.def Info: images/sympy.png used on input line 21.
+Package pdftex.def Info: images/sympy.png used on input line 23.
 (pdftex.def)             Requested size: 36.87563pt x 24.40723pt.
 
-<images/sklearn.png, id=236, 401.5pt x 218.8175pt>
+<images/sklearn.png, id=215, 401.5pt x 218.8175pt>
 File: images/sklearn.png Graphic file (type png)
  <use images/sklearn.png>
-Package pdftex.def Info: images/sklearn.png used on input line 25.
+Package pdftex.def Info: images/sklearn.png used on input line 27.
 (pdftex.def)             Requested size: 36.87563pt x 20.09673pt.
 )
 [3
@@ -1437,109 +1437,109 @@ Package pdftex.def Info: images/sklearn.png used on input line 25.
  <./images/python.png> <./images/matplotlib.png> <./images/sympy.png> <./images
 /sklearn.png>] [4
 
-] <images/create_line.png, id=348, 396.48125pt x 333.245pt>
+] <images/create_line.png, id=322, 396.48125pt x 333.245pt>
 File: images/create_line.png Graphic file (type png)
 
 <use images/create_line.png>
-Package pdftex.def Info: images/create_line.png used on input line 68.
+Package pdftex.def Info: images/create_line.png used on input line 70.
 (pdftex.def)             Requested size: 73.7506pt x 61.98495pt.
 
-<images/glue_intersections.png, id=349, 577.15625pt x 296.10625pt>
+<images/glue_intersections.png, id=323, 577.15625pt x 296.10625pt>
 File: images/glue_intersections.png Graphic file (type png)
 
 <use images/glue_intersections.png>
-Package pdftex.def Info: images/glue_intersections.png used on input line 68.
+Package pdftex.def Info: images/glue_intersections.png used on input line 70.
 (pdftex.def)             Requested size: 92.1879pt x 47.29663pt.
 
-<images/station_creation.png, id=350, 405.515pt x 77.28876pt>
+<images/station_creation.png, id=324, 405.515pt x 77.28876pt>
 File: images/station_creation.png Graphic file (type png)
 
 <use images/station_creation.png>
-Package pdftex.def Info: images/station_creation.png used on input line 68.
+Package pdftex.def Info: images/station_creation.png used on input line 70.
 (pdftex.def)             Requested size: 92.1879pt x 17.56964pt.
  [5
 
  <./images/create_line.png> <./images/glue_intersections.png> <./images/station
 _creation.png>]
-<images/net_1.png, id=408, 462.528pt x 346.896pt>
+<images/net_1.png, id=378, 462.528pt x 346.896pt>
 File: images/net_1.png Graphic file (type png)
  <use images/net_1.png>
-Package pdftex.def Info: images/net_1.png used on input line 76.
+Package pdftex.def Info: images/net_1.png used on input line 78.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (5.8556pt too high) detected at line 76
+Overfull \vbox (5.8556pt too high) detected at line 78
  []
 
 [6
 
- <./images/net_1.png>] <images/net_2.png, id=463, 462.528pt x 346.896pt>
+ <./images/net_1.png>] <images/net_2.png, id=431, 462.528pt x 346.896pt>
 File: images/net_2.png Graphic file (type png)
 
 <use images/net_2.png>
-Package pdftex.def Info: images/net_2.png used on input line 83.
+Package pdftex.def Info: images/net_2.png used on input line 85.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (5.8556pt too high) detected at line 83
+Overfull \vbox (5.8556pt too high) detected at line 85
  []
 
 [7
 
- <./images/net_2.png>] <images/net_3.png, id=520, 462.528pt x 346.896pt>
+ <./images/net_2.png>] <images/net_3.png, id=484, 462.528pt x 346.896pt>
 File: images/net_3.png Graphic file (type png)
 
 <use images/net_3.png>
-Package pdftex.def Info: images/net_3.png used on input line 90.
+Package pdftex.def Info: images/net_3.png used on input line 92.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (17.8556pt too high) detected at line 90
+Overfull \vbox (17.8556pt too high) detected at line 92
  []
 
 [8
 
- <./images/net_3.png>] <images/net_4.png, id=575, 462.528pt x 346.896pt>
+ <./images/net_3.png>] <images/net_4.png, id=537, 462.528pt x 346.896pt>
 File: images/net_4.png Graphic file (type png)
 
 <use images/net_4.png>
-Package pdftex.def Info: images/net_4.png used on input line 97.
+Package pdftex.def Info: images/net_4.png used on input line 99.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (17.8556pt too high) detected at line 97
+Overfull \vbox (17.8556pt too high) detected at line 99
  []
 
 [9
 
- <./images/net_4.png>] <images/net_5.png, id=631, 462.528pt x 346.896pt>
+ <./images/net_4.png>] <images/net_5.png, id=589, 462.528pt x 346.896pt>
 File: images/net_5.png Graphic file (type png)
 
 <use images/net_5.png>
-Package pdftex.def Info: images/net_5.png used on input line 104.
+Package pdftex.def Info: images/net_5.png used on input line 106.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (5.8556pt too high) detected at line 104
+Overfull \vbox (5.8556pt too high) detected at line 106
  []
 
 [10
 
- <./images/net_5.png>] <images/net_6.png, id=686, 462.528pt x 346.896pt>
+ <./images/net_5.png>] <images/net_6.png, id=642, 462.528pt x 346.896pt>
 File: images/net_6.png Graphic file (type png)
 
 <use images/net_6.png>
-Package pdftex.def Info: images/net_6.png used on input line 111.
+Package pdftex.def Info: images/net_6.png used on input line 113.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (5.8556pt too high) detected at line 111
+Overfull \vbox (5.8556pt too high) detected at line 113
  []
 
 [11
 
- <./images/net_6.png>] <images/net_7.png, id=742, 462.528pt x 346.896pt>
+ <./images/net_6.png>] <images/net_7.png, id=694, 462.528pt x 346.896pt>
 File: images/net_7.png Graphic file (type png)
 
 <use images/net_7.png>
-Package pdftex.def Info: images/net_7.png used on input line 118.
+Package pdftex.def Info: images/net_7.png used on input line 120.
 (pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
 
-Overfull \vbox (17.8556pt too high) detected at line 118
+Overfull \vbox (17.8556pt too high) detected at line 120
  []
 
 [12
@@ -1547,48 +1547,49 @@ Overfull \vbox (17.8556pt too high) detected at line 118
  <./images/net_7.png>] [13
 
 ]
-Overfull \vbox (1.23613pt too high) detected at line 167
+Overfull \vbox (1.23613pt too high) detected at line 169
  []
 
 [14
 
 ] [15
 
-] <images/schedule.png, id=961, 743.77875pt x 239.89626pt>
+] <images/schedule.png, id=903, 743.77875pt x 239.89626pt>
 File: images/schedule.png Graphic file (type png)
 
 <use images/schedule.png>
-Package pdftex.def Info: images/schedule.png used on input line 187.
+Package pdftex.def Info: images/schedule.png used on input line 189.
 (pdftex.def)             Requested size: 307.28987pt x 99.11581pt.
  [16
 
  <./images/schedule.png>]) (./slides_louis.tex
-[17
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-] [18
+ [17
 
-] <images/work_repartition_1000.png, id=1125, 987.2082pt x 495.0495pt>
+]
+[18] [19
+
+] <images/work_repartition_1000.png, id=1111, 987.2082pt x 495.0495pt>
 File: images/work_repartition_1000.png Graphic file (type png)
 
 <use images/work_repartition_1000.png>
 Package pdftex.def Info: images/work_repartition_1000.png used on input line 25
 .
 (pdftex.def)             Requested size: 296.16475pt x 148.51599pt.
- [19
+ [20
 
  <./images/work_repartition_1000.png>] <images/home_repartition_10000.png, id=1
-182, 987.2082pt x 495.0495pt>
+164, 987.2082pt x 495.0495pt>
 File: images/home_repartition_10000.png Graphic file (type png)
 
 <use images/home_repartition_10000.png>
 Package pdftex.def Info: images/home_repartition_10000.png used on input line 2
 5.
 (pdftex.def)             Requested size: 296.16475pt x 148.51599pt.
- [20
+ [21
 
- <./images/home_repartition_10000.png>] [21
-
-] [22
+ <./images/home_repartition_10000.png>] [22
 
 ] [23
 
@@ -1598,32 +1599,31 @@ Package pdftex.def Info: images/home_repartition_10000.png used on input line 2
 
 ] [26
 
-] [27
-
-]) (./slides_both.tex [28
+]) (./slides_both.tex [27
 
 ]
-<images/shortest_path.png, id=1669, 588.1975pt x 243.91125pt>
+<images/shortest_path.png, id=1520, 588.1975pt x 243.91125pt>
 File: images/shortest_path.png Graphic file (type png)
 
 <use images/shortest_path.png>
-Package pdftex.def Info: images/shortest_path.png used on input line 23.
-(pdftex.def)             Requested size: 307.28987pt x 127.42633pt.
- [29
+Package pdftex.def Info: images/shortest_path.png used on input line 27.
+(pdftex.def)             Requested size: 276.559pt x 114.68295pt.
 
- <./images/shortest_path.png>]
-<images/net_8.png, id=1724, 462.528pt x 346.896pt>
-File: images/net_8.png Graphic file (type png)
- <use images/net_8.png>
-Package pdftex.def Info: images/net_8.png used on input line 30.
-(pdftex.def)             Requested size: 215.10196pt x 161.32614pt.
-
-Overfull \vbox (17.8556pt too high) detected at line 30
+Overfull \vbox (3.21048pt too high) detected at line 27
  []
 
-[30
+[28
 
- <./images/net_8.png>] [31
+ <./images/shortest_path.png>]
+<images/net_8.png, id=1574, 328.1058pt x 244.9953pt>
+File: images/net_8.png Graphic file (type png)
+ <use images/net_8.png>
+Package pdftex.def Info: images/net_8.png used on input line 38.
+(pdftex.def)             Requested size: 122.91406pt x 91.77954pt.
+
+[29
+
+ <./images/net_8.png>] [30
 
 ])
 \tf@nav=\write6
@@ -1641,7 +1641,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 51.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 51.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 51.
 Package rerunfilecheck Info: File `slides_smallworld.out' has not changed.
-(rerunfilecheck)             Checksum: 71CF1C7D6D19955E2B2951BADE86FDF8;640.
+(rerunfilecheck)             Checksum: 63CAD10990D2463819E4A143814E2589;523.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -1650,11 +1650,11 @@ LaTeX Font Warning: Size substitutions with differences
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 51.
  ) 
 Here is how much of TeX's memory you used:
- 22615 strings out of 493029
- 440635 string characters out of 6136234
- 536625 words of memory out of 5000000
- 25545 multiletter control sequences out of 15000+600000
- 11601 words of font info for 43 fonts, out of 8000000 for 9000
+ 22602 strings out of 493029
+ 440516 string characters out of 6136234
+ 534769 words of memory out of 5000000
+ 25535 multiletter control sequences out of 15000+600000
+ 11957 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,19n,74p,414b,1565s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
@@ -1662,11 +1662,12 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb>
-Output written on slides_smallworld.pdf (31 pages, 983997 bytes).
+dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on slides_smallworld.pdf (30 pages, 991837 bytes).
 PDF statistics:
- 1873 PDF objects out of 2073 (max. 8388607)
- 1743 compressed objects within 18 object streams
- 74 named destinations out of 1000 (max. 500000)
- 232 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1717 PDF objects out of 1728 (max. 8388607)
+ 1592 compressed objects within 16 object streams
+ 70 named destinations out of 1000 (max. 500000)
+ 216 words of extra memory for PDF output out of 10000 (max. 10000000)
 
